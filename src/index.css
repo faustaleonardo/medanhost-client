@@ -1,3 +1,16 @@
+/* carousel-responsive-react */
+.carousel .thumbs-wrapper {
+  margin: 10px;
+}
+
+.red {
+  color: #db2828;
+}
+
+.gray {
+  color: rgba(0, 0, 0, 0.6);
+}
+
 .py-1r {
   padding-top: 1rem;
   padding-bottom: 1rem;
@@ -11,6 +24,10 @@
   transform: translate(-50%, -50%);
 }
 
+.center-block {
+  margin: 0 auto !important;
+}
+
 .general-form {
   border: 1px solid rgba(34, 36, 38, 0.15);
   box-shadow: 0 1px 2px 0 rgba(34, 36, 38, 0.15);
@@ -18,4 +35,31 @@
   padding: 1.25rem;
   width: 600px;
   margin: 0 auto;
+}
+
+.mt-1r {
+  margin-top: 1rem;
+}
+
+.d-block {
+  display: block;
+}
+
+.ratings-text {
+  text-align: right;
+  font-size: 1rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.room-list-heading {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.pagination {
+  text-align: center;
+  margin: 3rem 0;
 }
