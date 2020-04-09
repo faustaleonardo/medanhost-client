@@ -14,6 +14,9 @@ export default () => {
       case 'rooms':
         history.push('/rooms');
         break;
+      case 'bookings':
+        history.push('/bookings');
+        break;
       default:
         break;
     }
@@ -24,6 +27,7 @@ export default () => {
       <Menu.Item name="Medanhost" />
       <Menu.Item name="home" onClick={handleItemClick} />
       <Menu.Item name="rooms" onClick={handleItemClick} />
+      <Menu.Item name="bookings" onClick={handleItemClick} />
       <Menu.Menu position="right">
         <Menu.Item>
           <LoginModal />

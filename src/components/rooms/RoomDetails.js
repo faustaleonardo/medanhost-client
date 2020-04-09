@@ -126,7 +126,7 @@ export default () => {
                 </Grid>
                 <div className="border-bottom mt-1r mb-1r"></div>
                 <Form.Field control={Button} positive fluid>
-                  Book
+                  Confirm
                 </Form.Field>
               </Form>
             </div>

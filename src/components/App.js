@@ -7,6 +7,7 @@ import SearchForm from 'components/rooms/SearchForm';
 import LoginOtp from 'components/auth/LoginOtp';
 import RoomList from 'components/rooms/RoomList';
 import RoomDetails from 'components/rooms/RoomDetails';
+import BookingList from 'components/rooms/BookingList';
 
 export default () => {
   return (
@@ -18,6 +19,7 @@ export default () => {
           <Route exact path="/login/otp" component={LoginOtp} />
           <Route exact path="/rooms" component={RoomList} />
           <Route exact path="/rooms/1" component={RoomDetails} />
+          <Route exact path="/bookings" component={BookingList} />
         </BrowserRouter>
       </Container>
     </div>
