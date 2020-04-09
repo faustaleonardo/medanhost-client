@@ -4,7 +4,7 @@ import { Modal, Button, Form, Input } from 'semantic-ui-react';
 export default ({ open, setOpen }) => {
   return (
     <Modal size={'tiny'} open={open} onClose={() => setOpen(false)}>
-      <Modal.Header>Choose your budget</Modal.Header>
+      <Modal.Header>Choose budget</Modal.Header>
       <Modal.Content>
         <p>I would like to see the rooms with price between ... </p>
         <Form>

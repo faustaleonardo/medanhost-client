@@ -4,7 +4,7 @@ import { Modal, Button, Checkbox } from 'semantic-ui-react';
 export default ({ open, setOpen }) => {
   return (
     <Modal size={'mini'} open={open} onClose={() => setOpen(false)}>
-      <Modal.Header>Choose your type of place</Modal.Header>
+      <Modal.Header>Choose type of place</Modal.Header>
       <Modal.Content>
         <p>I would like to have ...</p>
         <div className="py-05r">

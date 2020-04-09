@@ -17,7 +17,7 @@ export default () => {
       </Form>
 
       <Modal size={'mini'} open={open} onClose={() => setOpen(false)}>
-        <Modal.Header>Type your OTP Code</Modal.Header>
+        <Modal.Header>Type OTP Code</Modal.Header>
         <Modal.Content>
           <Form>
             <Form.Input label="OTP Code" placeholder="000000" />

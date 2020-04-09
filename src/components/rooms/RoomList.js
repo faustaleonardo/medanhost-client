@@ -6,15 +6,21 @@ import { Link } from 'react-router-dom';
 import Pagination from 'components/partials/Pagination';
 import TypeOfPlaceModal from './TypeOfPlaceModal';
 import PriceModal from './PriceModal';
+import SearchDetailsModal from './SearchDetailsModal';
 
 export default () => {
   const [openTypeOfPlace, setOpenTypeOfPlace] = useState(false);
   const [openPrice, setOpenPrice] = useState(false);
+  const [openSearchDetails, setOpenSearchDetails] = useState(false);
 
   return (
     <div>
       <TypeOfPlaceModal open={openTypeOfPlace} setOpen={setOpenTypeOfPlace} />
       <PriceModal open={openPrice} setOpen={setOpenPrice} />
+      <SearchDetailsModal
+        open={openSearchDetails}
+        setOpen={setOpenSearchDetails}
+      />
 
       <div className="text-center">
         <h1>Stays in Sydney</h1>
@@ -28,7 +34,9 @@ export default () => {
         <Button className="mx-05r" onClick={() => setOpenPrice(true)}>
           Price
         </Button>
-        <Button className="mx-05r">Search Details</Button>
+        <Button className="mx-05r" onClick={() => setOpenSearchDetails(true)}>
+          Search Details
+        </Button>
       </div>
 
       <Grid columns={3}>
