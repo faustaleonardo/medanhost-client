@@ -1,12 +1,25 @@
 import React, { useState } from 'react';
 import { Menu } from 'semantic-ui-react';
 import LoginModal from 'components/auth/LoginModal';
+import { useHistory } from 'react-router-dom';
 
 export default () => {
   const [activeItem, setActiveItem] = useState('home');
+  const history = useHistory();
 
   const handleItemClick = (e, { name }) => {
     setActiveItem(name);
+
+    switch (name) {
+      case 'home':
+        history.push('/');
+        break;
+      case 'rooms':
+        history.push('/rooms');
+        break;
+      default:
+        break;
+    }
   };
 
   return (

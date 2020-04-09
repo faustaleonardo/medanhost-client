@@ -3,7 +3,7 @@ import { Form, Button } from 'semantic-ui-react';
 
 export default () => {
   return (
-    <div className="search-form general-form center-vh">
+    <div className="general-form center-vh">
       <Form>
         <h1>Find your room</h1>
         <Form.Field>
