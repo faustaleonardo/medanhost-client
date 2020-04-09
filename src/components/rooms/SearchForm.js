@@ -14,7 +14,7 @@ export default () => {
           <Form.Input fluid label="Check out" placeholder="Check out" />
           <Form.Input fluid label="Guests" placeholder="Guests" />
         </Form.Group>
-        <Form.Field control={Button} primary>
+        <Form.Field control={Button} positive>
           Search
         </Form.Field>
       </Form>

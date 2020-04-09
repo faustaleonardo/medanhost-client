@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Menu, Button } from 'semantic-ui-react';
+import { Menu } from 'semantic-ui-react';
+import LoginModal from 'components/auth/LoginModal';
 
 export default () => {
   const [activeItem, setActiveItem] = useState('home');
@@ -23,7 +24,7 @@ export default () => {
       />
       <Menu.Menu position="right">
         <Menu.Item>
-          <Button primary>Login</Button>
+          <LoginModal />
         </Menu.Item>
       </Menu.Menu>
     </Menu>
