@@ -1,16 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Grid, Card, Button, Icon } from 'semantic-ui-react';
 import { Carousel } from 'react-responsive-carousel';
 import { Link } from 'react-router-dom';
 
 import Pagination from 'components/partials/Pagination';
+import TypeOfPlaceModal from './TypeOfPlaceModal';
 
 export default () => {
+  const [openTypeOfPlace, setOpenTypeOfPlace] = useState(false);
+
+  const handleTypeOfPlace = () => {
+    setOpenTypeOfPlace(true);
+  };
+
   return (
     <div>
-      <div className="room-list-heading">
+      <TypeOfPlaceModal open={openTypeOfPlace} setOpen={setOpenTypeOfPlace} />
+
+      <div className="text-center">
         <h1>Stays in Sydney</h1>
         <p>300+ stays · Apr 10 - May 5 · 2 guests</p>
+      </div>
+
+      <div className="text-center mt-1r mb-3r">
+        <Button className="mx-05r" onClick={handleTypeOfPlace}>
+          Type of Place
+        </Button>
+        <Button className="mx-05r">Price</Button>
+        <Button className="mx-05r">Search Details</Button>
       </div>
 
       <Grid columns={3}>

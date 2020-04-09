@@ -16,6 +16,15 @@
   padding-bottom: 1rem;
 }
 
+.py-05r {
+  padding-top: 0.5em;
+  padding-bottom: 0.5rem;
+}
+
+.mx-05r {
+  margin: 0 0.5rem !important;
+}
+
 .center-vh {
   margin: 0;
   position: absolute;
@@ -54,8 +63,7 @@
   text-align: center;
 }
 
-.room-list-heading {
-  text-align: center;
+.mb-3r {
   margin-bottom: 3rem;
 }
 

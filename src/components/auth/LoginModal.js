@@ -20,7 +20,7 @@ export default () => {
       <Modal size={'mini'} open={open} onClose={() => setOpen(false)}>
         <Modal.Header>Choose your login method</Modal.Header>
         <Modal.Content>
-          <p>I would like to login with</p>
+          <p>I would like to login with ...</p>
         </Modal.Content>
         <Modal.Actions>
           <Button
