@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { Grid, Card, Button, Icon } from 'semantic-ui-react';
-import { Carousel } from 'react-responsive-carousel';
+import { Grid, Card, Button, Icon, Image } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 import Pagination from 'components/partials/Pagination';
-import TypeOfPlaceModal from './TypeOfPlaceModal';
-import PriceModal from './PriceModal';
-import SearchDetailsModal from './SearchDetailsModal';
+import TypeOfPlaceModal from './modals/TypeOfPlaceModal';
+import PriceModal from './modals/PriceModal';
+import SearchDetailsModal from './modals/SearchDetailsModal';
 
 export default () => {
   const [openTypeOfPlace, setOpenTypeOfPlace] = useState(false);
@@ -43,20 +42,9 @@ export default () => {
         <Grid.Row>
           <Grid.Column>
             <Card className="center-block">
-              <Carousel showIndicators={false} showArrows={false}>
-                <Link to="rooms/1" className="d-block">
-                  <img
-                    src="https://a0.muscache.com/im/pictures/a08c1952-7933-47c4-a5f4-82315824b471.jpg?aki_policy=large"
-                    alt="house-1"
-                  />
-                </Link>
-                <Link to="rooms/1" className="d-block">
-                  <img
-                    src="https://a0.muscache.com/im/pictures/cb43c75f-f3ed-4a80-afdf-51ed9d91f36d.jpg?aki_policy=large"
-                    alt="house-2"
-                  />
-                </Link>
-              </Carousel>
+              <Link to="/rooms/1">
+                <Image src="https://a0.muscache.com/im/pictures/a08c1952-7933-47c4-a5f4-82315824b471.jpg?aki_policy=large" />
+              </Link>
               <Card.Content>
                 <Card.Header>
                   <div>
@@ -67,7 +55,7 @@ export default () => {
                         </Grid.Column>
                         <Grid.Column>
                           <div className="ratings-text">
-                            <Icon name="star" className="red" />
+                            <Icon name="star" color="red" />
                             <span>
                               4.7 <span className="gray">(30)</span>
                             </span>
@@ -93,20 +81,9 @@ export default () => {
 
           <Grid.Column>
             <Card className="center-block">
-              <Carousel showIndicators={false} showArrows={false}>
-                <Link to="rooms/1" className="d-block">
-                  <img
-                    src="https://a0.muscache.com/im/pictures/a08c1952-7933-47c4-a5f4-82315824b471.jpg?aki_policy=large"
-                    alt="house-1"
-                  />
-                </Link>
-                <Link to="rooms/1" className="d-block">
-                  <img
-                    src="https://a0.muscache.com/im/pictures/cb43c75f-f3ed-4a80-afdf-51ed9d91f36d.jpg?aki_policy=large"
-                    alt="house-2"
-                  />
-                </Link>
-              </Carousel>
+              <Link to="/rooms/1">
+                <Image src="https://a0.muscache.com/im/pictures/a08c1952-7933-47c4-a5f4-82315824b471.jpg?aki_policy=large" />
+              </Link>
               <Card.Content>
                 <Card.Header>
                   <div>
@@ -117,7 +94,7 @@ export default () => {
                         </Grid.Column>
                         <Grid.Column>
                           <div className="ratings-text">
-                            <Icon name="star" className="red" />
+                            <Icon name="star" color="red" />
                             <span>
                               4.7 <span className="gray">(30)</span>
                             </span>
@@ -143,20 +120,9 @@ export default () => {
 
           <Grid.Column>
             <Card className="center-block">
-              <Carousel showIndicators={false} showArrows={false}>
-                <Link to="rooms/1" className="d-block">
-                  <img
-                    src="https://a0.muscache.com/im/pictures/a08c1952-7933-47c4-a5f4-82315824b471.jpg?aki_policy=large"
-                    alt="house-1"
-                  />
-                </Link>
-                <Link to="rooms/1" className="d-block">
-                  <img
-                    src="https://a0.muscache.com/im/pictures/cb43c75f-f3ed-4a80-afdf-51ed9d91f36d.jpg?aki_policy=large"
-                    alt="house-2"
-                  />
-                </Link>
-              </Carousel>
+              <Link to="/rooms/1">
+                <Image src="https://a0.muscache.com/im/pictures/a08c1952-7933-47c4-a5f4-82315824b471.jpg?aki_policy=large" />
+              </Link>
               <Card.Content>
                 <Card.Header>
                   <div>
@@ -167,7 +133,7 @@ export default () => {
                         </Grid.Column>
                         <Grid.Column>
                           <div className="ratings-text">
-                            <Icon name="star" className="red" />
+                            <Icon name="star" color="red" />
                             <span>
                               4.7 <span className="gray">(30)</span>
                             </span>

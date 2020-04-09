@@ -25,6 +25,14 @@
   margin: 0 0.5rem !important;
 }
 
+.mb-05r {
+  margin-bottom: 0.5rem !important;
+}
+
+.mt-05r {
+  margin-top: 0.5rem !important;
+}
+
 .center-vh {
   margin: 0;
   position: absolute;
@@ -46,8 +54,35 @@
   margin: 0 auto;
 }
 
+.border-form {
+  border: 1px solid rgba(34, 36, 38, 0.15);
+  box-shadow: 0 1px 2px 0 rgba(34, 36, 38, 0.15);
+  border-radius: 0.28571429rem;
+  padding: 1.25rem;
+}
+
 .mt-1r {
   margin-top: 1rem;
+}
+
+.mt-2r {
+  margin-top: 2rem;
+}
+
+.mt-8r {
+  margin-top: 8rem;
+}
+
+.mb-1r {
+  margin-bottom: 1rem;
+}
+
+.mb-2r {
+  margin-bottom: 2rem;
+}
+
+.mb-3r {
+  margin-bottom: 3rem;
 }
 
 .d-block {
@@ -63,11 +98,30 @@
   text-align: center;
 }
 
-.mb-3r {
-  margin-bottom: 3rem;
+.text-right {
+  text-align: right;
 }
 
 .pagination {
   text-align: center;
   margin: 3rem 0;
+}
+
+#button-bookmark {
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+}
+
+.border-bottom {
+  border-bottom: 1px solid #ccc;
+}
+
+.map-container {
+  position: relative;
+  height: 450px;
+}
+
+.bold {
+  font-weight: bolder;
 }
