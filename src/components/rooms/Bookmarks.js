@@ -1,56 +1,38 @@
 import React, { useState } from 'react';
-import { Grid, Card, Button, Icon, Image } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
-
-import Pagination from 'components/partials/Pagination';
-import TypeOfPlaceModal from './modals/TypeOfPlaceModal';
-import PriceModal from './modals/PriceModal';
-import SearchDetailsModal from './modals/SearchDetailsModal';
+import { Grid, Card, Icon, Button, Image } from 'semantic-ui-react';
+import { Link, useHistory } from 'react-router-dom';
 import MapContainerModal from './modals/MapContainerModal';
+import WarningModal from 'components/partials/WarningModal';
+import Pagination from 'components/partials/Pagination';
 
 export default () => {
-  const [openTypeOfPlace, setOpenTypeOfPlace] = useState(false);
-  const [openPrice, setOpenPrice] = useState(false);
-  const [openSearchDetails, setOpenSearchDetails] = useState(false);
   const [openMapContainer, setOpenMapContainer] = useState(false);
+  const [openWarningModal, setOpenWarningModal] = useState(false);
+  const history = useHistory();
 
   return (
     <div>
-      <TypeOfPlaceModal open={openTypeOfPlace} setOpen={setOpenTypeOfPlace} />
-      <PriceModal open={openPrice} setOpen={setOpenPrice} />
-      <SearchDetailsModal
-        open={openSearchDetails}
-        setOpen={setOpenSearchDetails}
-      />
       <MapContainerModal
         open={openMapContainer}
         setOpen={setOpenMapContainer}
       />
 
-      <div className="text-center">
-        <h1>Stays in Sydney</h1>
-        <p>300+ stays · Apr 10 - May 5 · 2 guests</p>
-      </div>
+      <WarningModal
+        open={openWarningModal}
+        setOpen={setOpenWarningModal}
+        title={'Remove From Bookmarks'}
+      />
 
-      <div className="text-center mt-1r mb-3r">
-        <Button className="mx-05r" onClick={() => setOpenTypeOfPlace(true)}>
-          Type of Place
-        </Button>
-        <Button className="mx-05r" onClick={() => setOpenPrice(true)}>
-          Price
-        </Button>
-        <Button className="mx-05r" onClick={() => setOpenSearchDetails(true)}>
-          Search Details
-        </Button>
-      </div>
+      <h1>Your Bookmarks</h1>
 
       <Grid columns={3}>
         <Grid.Row>
           <Grid.Column>
-            <Card className="center-block">
+            <Card>
               <Link to="/rooms/1">
                 <Image src="https://a0.muscache.com/im/pictures/a08c1952-7933-47c4-a5f4-82315824b471.jpg?aki_policy=large" />
               </Link>
+              <div className="border-bottom"></div>
               <Card.Content>
                 <Card.Header>
                   <div>
@@ -75,9 +57,7 @@ export default () => {
                   <span>Shared Room</span>
                 </Card.Meta>
                 <Card.Description>
-                  <div>4 guests · 3 beds · 1 bath</div>
-                  <h4 className="mt-1r">Rp 500.000 / night</h4>
-
+                  <div className="mb-1r">4 guests · 3 beds · 1 bath</div>
                   <Button
                     icon
                     labelPosition="left"
@@ -88,14 +68,33 @@ export default () => {
                   </Button>
                 </Card.Description>
               </Card.Content>
+              <Card.Content extra>
+                <div className="ui two buttons">
+                  <Button
+                    basic
+                    color="green"
+                    onClick={() => history.push('/rooms/1')}
+                  >
+                    Visit
+                  </Button>
+                  <Button
+                    basic
+                    color="red"
+                    onClick={() => setOpenWarningModal(true)}
+                  >
+                    Remove
+                  </Button>
+                </div>
+              </Card.Content>
             </Card>
           </Grid.Column>
 
           <Grid.Column>
-            <Card className="center-block">
+            <Card>
               <Link to="/rooms/1">
                 <Image src="https://a0.muscache.com/im/pictures/a08c1952-7933-47c4-a5f4-82315824b471.jpg?aki_policy=large" />
               </Link>
+              <div className="border-bottom"></div>
               <Card.Content>
                 <Card.Header>
                   <div>
@@ -120,9 +119,7 @@ export default () => {
                   <span>Shared Room</span>
                 </Card.Meta>
                 <Card.Description>
-                  <div>4 guests · 3 beds · 1 bath</div>
-                  <h4 className="mt-1r">Rp 500.000 / night</h4>
-
+                  <div className="mb-1r">4 guests · 3 beds · 1 bath</div>
                   <Button
                     icon
                     labelPosition="left"
@@ -133,14 +130,33 @@ export default () => {
                   </Button>
                 </Card.Description>
               </Card.Content>
+              <Card.Content extra>
+                <div className="ui two buttons">
+                  <Button
+                    basic
+                    color="green"
+                    onClick={() => history.push('/rooms/1')}
+                  >
+                    Visit
+                  </Button>
+                  <Button
+                    basic
+                    color="red"
+                    onClick={() => setOpenWarningModal(true)}
+                  >
+                    Remove
+                  </Button>
+                </div>
+              </Card.Content>
             </Card>
           </Grid.Column>
 
           <Grid.Column>
-            <Card className="center-block">
+            <Card>
               <Link to="/rooms/1">
                 <Image src="https://a0.muscache.com/im/pictures/a08c1952-7933-47c4-a5f4-82315824b471.jpg?aki_policy=large" />
               </Link>
+              <div className="border-bottom"></div>
               <Card.Content>
                 <Card.Header>
                   <div>
@@ -165,9 +181,7 @@ export default () => {
                   <span>Shared Room</span>
                 </Card.Meta>
                 <Card.Description>
-                  <div>4 guests · 3 beds · 1 bath</div>
-                  <h4 className="mt-1r">Rp 500.000 / night</h4>
-
+                  <div className="mb-1r">4 guests · 3 beds · 1 bath</div>
                   <Button
                     icon
                     labelPosition="left"
@@ -177,13 +191,31 @@ export default () => {
                     Show Location
                   </Button>
                 </Card.Description>
+              </Card.Content>
+              <Card.Content extra>
+                <div className="ui two buttons">
+                  <Button
+                    basic
+                    color="green"
+                    onClick={() => history.push('/rooms/1')}
+                  >
+                    Visit
+                  </Button>
+                  <Button
+                    basic
+                    color="red"
+                    onClick={() => setOpenWarningModal(true)}
+                  >
+                    Remove
+                  </Button>
+                </div>
               </Card.Content>
             </Card>
           </Grid.Column>
         </Grid.Row>
       </Grid>
 
-      <Pagination className="pagination" />
+      <Pagination />
     </div>
   );
 };

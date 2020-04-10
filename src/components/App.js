@@ -6,6 +6,7 @@ import Navigation from 'components/partials/Navigation';
 import SearchForm from 'components/rooms/SearchForm';
 import LoginOtp from 'components/auth/LoginOtp';
 import RoomList from 'components/rooms/RoomList';
+import Bookmarks from 'components/rooms/Bookmarks';
 import RoomDetails from 'components/rooms/RoomDetails';
 import BookingList from 'components/rooms/BookingList';
 
@@ -19,6 +20,7 @@ export default () => {
           <Route exact path="/login/otp" component={LoginOtp} />
           <Route exact path="/rooms" component={RoomList} />
           <Route exact path="/rooms/1" component={RoomDetails} />
+          <Route exact path="/rooms/bookmarks" component={Bookmarks} />
           <Route exact path="/bookings" component={BookingList} />
         </BrowserRouter>
       </Container>
