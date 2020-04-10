@@ -129,3 +129,9 @@
 .bold {
   font-weight: bolder;
 }
+
+.revenue-chart {
+  width: 80%;
+  margin: 0 auto;
+  margin-bottom: 3rem;
+}

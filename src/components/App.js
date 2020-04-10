@@ -16,6 +16,7 @@ import BookingList from 'components/rooms/BookingList';
 import MyRoomList from 'components/host/MyRoomList';
 import MyRoomForm from 'components/host/MyRoomForm';
 import UpcomingBookings from 'components/host/UpcomingBookings';
+import Revenue from 'components/host/Revenue';
 
 export default () => {
   return (
@@ -36,6 +37,7 @@ export default () => {
           <Route exact path="/hosts/1/rooms" component={MyRoomList} />
           <Route exact path="/hosts/1/rooms/1/create" component={MyRoomForm} />
           <Route exact path="/hosts/1/bookings" component={UpcomingBookings} />
+          <Route exact path="/hosts/1/revenue" component={Revenue} />
         </BrowserRouter>
       </Container>
     </div>
