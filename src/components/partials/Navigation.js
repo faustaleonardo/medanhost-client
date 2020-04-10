@@ -29,17 +29,20 @@ export default () => {
       case 'revenue':
         history.push('/hosts/1/revenue');
         break;
-      case 'users management':
+      case 'manage users':
         history.push('/admin/users/manage');
         break;
-      case 'rooms management':
+      case 'manage rooms':
         history.push('/admin/rooms/manage');
         break;
-      case 'bookings management':
+      case 'manage bookings':
         history.push('/admin/bookings/manage');
         break;
-      case 'reviews management':
+      case 'manage reviews':
         history.push('/admin/reviews/manage');
+        break;
+      case 'transaction':
+        history.push('/admin/transaction');
         break;
       default:
         break;
@@ -60,10 +63,11 @@ export default () => {
       <Menu.Item name="revenue" onClick={handleItemClick} /> */}
 
       {/* admin */}
-      <Menu.Item name="users management" onClick={handleItemClick} />
-      <Menu.Item name="rooms management" onClick={handleItemClick} />
-      <Menu.Item name="bookings management" onClick={handleItemClick} />
-      <Menu.Item name="reviews management" onClick={handleItemClick} />
+      <Menu.Item name="manage users" onClick={handleItemClick} />
+      <Menu.Item name="manage rooms" onClick={handleItemClick} />
+      <Menu.Item name="manage bookings" onClick={handleItemClick} />
+      <Menu.Item name="manage reviews" onClick={handleItemClick} />
+      <Menu.Item name="transaction" onClick={handleItemClick} />
 
       <Menu.Menu position="right">
         <Menu.Item>

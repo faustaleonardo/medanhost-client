@@ -19,10 +19,11 @@ import UpcomingBookings from 'components/host/UpcomingBookings';
 import Revenue from 'components/host/Revenue';
 
 // admin
-import UserListManagement from 'components/admin/UserListManagement';
-import RoomListManagement from 'components/admin/RoomListManagement';
-import BookingListManagement from 'components/admin/BookingListManagement';
-import ReviewListManagement from 'components/admin/ReviewListManagement';
+import ManageUserList from 'components/admin/ManageUserList';
+import ManageRoomList from 'components/admin/ManageRoomList';
+import ManageBookingList from 'components/admin/ManageBookingList';
+import ManageReviewList from 'components/admin/ManageReviewList';
+import Transaction from 'components/admin/Transaction';
 
 export default () => {
   return (
@@ -46,26 +47,19 @@ export default () => {
           <Route exact path="/hosts/1/revenue" component={Revenue} />
 
           {/* admin */}
-          <Route
-            exact
-            path="/admin/users/manage"
-            component={UserListManagement}
-          />
-          <Route
-            exact
-            path="/admin/rooms/manage"
-            component={RoomListManagement}
-          />
+          <Route exact path="/admin/users/manage" component={ManageUserList} />
+          <Route exact path="/admin/rooms/manage" component={ManageRoomList} />
           <Route
             exact
             path="/admin/bookings/manage"
-            component={BookingListManagement}
+            component={ManageBookingList}
           />
           <Route
             exact
             path="/admin/reviews/manage"
-            component={ReviewListManagement}
+            component={ManageReviewList}
           />
+          <Route exact path="/admin/transaction" component={Transaction} />
         </BrowserRouter>
       </Container>
     </div>
