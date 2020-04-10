@@ -1,6 +1,9 @@
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useContext } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 import { Container } from 'semantic-ui-react';
+import { AuthContext } from 'context/auth/authState';
+import axiosInstance from 'utils/axiosInstance';
 
 import Navigation from 'components/partials/Navigation';
 import SearchForm from 'components/rooms/SearchForm';
@@ -26,6 +29,17 @@ import ManageReviewList from 'components/admin/ManageReviewList';
 import Transaction from 'components/admin/Transaction';
 
 export default () => {
+  const { setAuth } = useContext(AuthContext);
+
+  useEffect(() => {
+    const fetchAuth = async () => {
+      const jwtToken = localStorage.getItem('jwt_token');
+      if (!jwtToken) setAuth(false);
+      // const response = await axiosInstance.get('api/v1/users/1');
+    };
+    fetchAuth();
+  }, []);
+
   return (
     <div className="py-1r">
       <Container>
