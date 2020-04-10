@@ -23,6 +23,9 @@ export default () => {
       case 'my rooms':
         history.push('/hosts/1/rooms');
         break;
+      case 'upcoming bookings':
+        history.push('/hosts/1/bookings');
+        break;
       default:
         break;
     }
@@ -39,6 +42,7 @@ export default () => {
 
       {/* host */}
       <Menu.Item name="my rooms" onClick={handleItemClick} />
+      <Menu.Item name="upcoming bookings" onClick={handleItemClick} />
       <Menu.Menu position="right">
         <Menu.Item>
           <LoginModal />

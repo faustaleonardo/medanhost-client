@@ -15,6 +15,7 @@ import BookingList from 'components/rooms/BookingList';
 // host
 import MyRoomList from 'components/host/MyRoomList';
 import MyRoomForm from 'components/host/MyRoomForm';
+import UpcomingBookings from 'components/host/UpcomingBookings';
 
 export default () => {
   return (
@@ -34,6 +35,7 @@ export default () => {
           {/* host */}
           <Route exact path="/hosts/1/rooms" component={MyRoomList} />
           <Route exact path="/hosts/1/rooms/1/create" component={MyRoomForm} />
+          <Route exact path="/hosts/1/bookings" component={UpcomingBookings} />
         </BrowserRouter>
       </Container>
     </div>
