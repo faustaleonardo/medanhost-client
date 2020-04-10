@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Table, Button, Icon } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import Pagination from 'components/partials/Pagination';
 import WarningModal from 'components/partials/WarningModal';
 
 export default () => {
   const [openWarningModal, setOpenWarningModal] = useState(false);
+  const history = useHistory();
 
   return (
     <div>
@@ -18,8 +19,13 @@ export default () => {
 
       <h1>Your Rooms</h1>
 
-      <div className="text-right mb-1r">
-        <Button positive>Create</Button>
+      <div className="mb-1r">
+        <Button
+          positive
+          onClick={() => history.push('/hosts/1/rooms/1/create')}
+        >
+          Create
+        </Button>
       </div>
       <div className="mb-3r">
         <Table striped>
