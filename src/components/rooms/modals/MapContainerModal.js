@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Button } from 'semantic-ui-react';
+import { Modal } from 'semantic-ui-react';
 import MapContainer from 'components/partials/MapContainer';
 
 export default ({ open, setOpen }) => {

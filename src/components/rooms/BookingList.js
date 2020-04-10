@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { Table, Button, Icon, Message } from 'semantic-ui-react';
 import Pagination from 'components/partials/Pagination';
 import MapContainerModal from './modals/MapContainerModal';
+import ReviewModal from './modals/ReviewModal';
 import WarningModal from 'components/partials/WarningModal';
 
 export default () => {
   const [openMapContainer, setOpenMapContainer] = useState(false);
   const [openWarningModal, setOpenWarningModal] = useState(false);
+  const [openReview, setOpenReview] = useState(false);
 
   return (
     <div>
@@ -20,6 +22,8 @@ export default () => {
         setOpen={setOpenWarningModal}
         title={'Cancel Booking'}
       />
+
+      <ReviewModal open={openReview} setOpen={setOpenReview} />
 
       <h1>Your bookings</h1>
       <div className="mb-3r">
@@ -58,7 +62,7 @@ export default () => {
                 </div>
               </Table.Cell>
               <Table.Cell>
-                Rp 500.000 x 3 nights <br />
+                Rp 500.000 x 3 nights = <br />
                 <span className="green">Rp 1.500.000</span>
               </Table.Cell>
               <Table.Cell>
@@ -94,7 +98,7 @@ export default () => {
 
           <Table.Body>
             <Table.Row>
-              <Table.Cell>Waiting for payment</Table.Cell>
+              <Table.Cell>Paid</Table.Cell>
               <Table.Cell>
                 17 Apr 20 to 20 Apr 20 <br />
                 3 guests <br />
@@ -111,15 +115,13 @@ export default () => {
                 </div>
               </Table.Cell>
               <Table.Cell>
-                Rp 500.000 x 3 nights <br />
+                Rp 500.000 x 3 nights =<br />
                 <span className="green">Rp 1.500.000</span>
               </Table.Cell>
               <Table.Cell>
-                <Button.Group>
-                  <Button positive>Pay now</Button>
-                  <Button.Or />
-                  <Button negative>Cancel</Button>
-                </Button.Group>
+                <Button positive onClick={() => setOpenReview(true)}>
+                  Review
+                </Button>
               </Table.Cell>
             </Table.Row>
           </Table.Body>

@@ -20,6 +20,9 @@ export default () => {
       case 'bookmarks':
         history.push('/rooms/bookmarks');
         break;
+      case 'my rooms':
+        history.push('/hosts/1/rooms');
+        break;
       default:
         break;
     }
@@ -29,9 +32,13 @@ export default () => {
     <Menu borderless>
       <Menu.Item name="Medanhost" />
       <Menu.Item name="home" onClick={handleItemClick} />
+      {/* guest */}
       <Menu.Item name="rooms" onClick={handleItemClick} />
       <Menu.Item name="bookmarks" onClick={handleItemClick} />
       <Menu.Item name="bookings" onClick={handleItemClick} />
+
+      {/* host */}
+      <Menu.Item name="my rooms" onClick={handleItemClick} />
       <Menu.Menu position="right">
         <Menu.Item>
           <LoginModal />
