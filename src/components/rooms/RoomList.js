@@ -75,9 +75,11 @@ export default () => {
                   <span>Shared Room</span>
                 </Card.Meta>
                 <Card.Description>
-                  <div>4 guests · 3 beds · 1 bath</div>
-                  <h4 className="mt-1r">Rp 500.000 / night</h4>
-
+                  <div>4 guests</div>
+                  <h4 className="mt-05r">Rp 500.000 / night</h4>
+                  <div className="mb-05r">
+                    Jalan Ustad Abdul Hamid No.32, Tanjungbalai
+                  </div>
                   <Button
                     icon
                     labelPosition="left"
@@ -120,9 +122,11 @@ export default () => {
                   <span>Shared Room</span>
                 </Card.Meta>
                 <Card.Description>
-                  <div>4 guests · 3 beds · 1 bath</div>
-                  <h4 className="mt-1r">Rp 500.000 / night</h4>
-
+                  <div>4 guests</div>
+                  <h4 className="mt-05r">Rp 500.000 / night</h4>
+                  <div className="mb-05r">
+                    Jalan Ustad Abdul Hamid No.32, Tanjungbalai
+                  </div>
                   <Button
                     icon
                     labelPosition="left"
@@ -165,9 +169,11 @@ export default () => {
                   <span>Shared Room</span>
                 </Card.Meta>
                 <Card.Description>
-                  <div>4 guests · 3 beds · 1 bath</div>
-                  <h4 className="mt-1r">Rp 500.000 / night</h4>
-
+                  <div>4 guests</div>
+                  <h4 className="mt-05r">Rp 500.000 / night</h4>
+                  <div className="mb-05r">
+                    Jalan Ustad Abdul Hamid No.32, Tanjungbalai
+                  </div>
                   <Button
                     icon
                     labelPosition="left"

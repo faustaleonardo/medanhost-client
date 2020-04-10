@@ -57,7 +57,10 @@ export default () => {
                   <span>Shared Room</span>
                 </Card.Meta>
                 <Card.Description>
-                  <div className="mb-1r">4 guests · 3 beds · 1 bath</div>
+                  <div className="mb-05r">4 guests</div>
+                  <div className="mb-05r">
+                    Jalan Ustad Abdul Hamid No.32, Tanjungbalai
+                  </div>
                   <Button
                     icon
                     labelPosition="left"
@@ -119,7 +122,10 @@ export default () => {
                   <span>Shared Room</span>
                 </Card.Meta>
                 <Card.Description>
-                  <div className="mb-1r">4 guests · 3 beds · 1 bath</div>
+                  <div className="mb-05r">4 guests</div>
+                  <div className="mb-05r">
+                    Jalan Ustad Abdul Hamid No.32, Tanjungbalai
+                  </div>
                   <Button
                     icon
                     labelPosition="left"
@@ -181,7 +187,10 @@ export default () => {
                   <span>Shared Room</span>
                 </Card.Meta>
                 <Card.Description>
-                  <div className="mb-1r">4 guests · 3 beds · 1 bath</div>
+                  <div className="mb-05r">4 guests</div>
+                  <div className="mb-05r">
+                    Jalan Ustad Abdul Hamid No.32, Tanjungbalai
+                  </div>
                   <Button
                     icon
                     labelPosition="left"
