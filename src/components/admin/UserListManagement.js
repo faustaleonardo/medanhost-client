@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, Button, Icon, Message } from 'semantic-ui-react';
+import { Table, Button } from 'semantic-ui-react';
 import Pagination from 'components/partials/Pagination';
 import WarningModal from 'components/partials/WarningModal';
 
@@ -14,7 +14,7 @@ export default () => {
         title={'Delete User'}
       />
 
-      <h1>Your Bookings</h1>
+      <h1>Users</h1>
       <div className="mb-3r">
         <Table striped>
           <Table.Header>

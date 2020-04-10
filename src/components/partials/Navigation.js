@@ -29,8 +29,11 @@ export default () => {
       case 'revenue':
         history.push('/hosts/1/revenue');
         break;
-      case 'users':
+      case 'users management':
         history.push('/admin/users/manage');
+        break;
+      case 'rooms management':
+        history.push('/admin/rooms/manage');
         break;
       default:
         break;
@@ -52,7 +55,8 @@ export default () => {
       <Menu.Item name="revenue" onClick={handleItemClick} /> */}
 
       {/* admin */}
-      <Menu.Item name="users" onClick={handleItemClick} />
+      <Menu.Item name="users management" onClick={handleItemClick} />
+      <Menu.Item name="rooms management" onClick={handleItemClick} />
 
       <Menu.Menu position="right">
         <Menu.Item>

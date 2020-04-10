@@ -19,7 +19,8 @@ import UpcomingBookings from 'components/host/UpcomingBookings';
 import Revenue from 'components/host/Revenue';
 
 // admin
-import UserList from 'components/admin/UserList';
+import UserListManagement from 'components/admin/UserListManagement';
+import RoomListManagement from 'components/admin/RoomListManagement';
 
 export default () => {
   return (
@@ -43,7 +44,16 @@ export default () => {
           <Route exact path="/hosts/1/revenue" component={Revenue} />
 
           {/* admin */}
-          <Route exact path="/admin/users/manage" component={UserList} />
+          <Route
+            exact
+            path="/admin/users/manage"
+            component={UserListManagement}
+          />
+          <Route
+            exact
+            path="/admin/rooms/manage"
+            component={RoomListManagement}
+          />
         </BrowserRouter>
       </Container>
     </div>
