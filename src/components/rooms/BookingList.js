@@ -2,15 +2,23 @@ import React, { useState } from 'react';
 import { Table, Button, Icon, Message } from 'semantic-ui-react';
 import Pagination from 'components/partials/Pagination';
 import MapContainerModal from './modals/MapContainerModal';
+import WarningModal from 'components/partials/WarningModal';
 
 export default () => {
   const [openMapContainer, setOpenMapContainer] = useState(false);
+  const [openWarningModal, setOpenWarningModal] = useState(false);
 
   return (
     <div>
       <MapContainerModal
         open={openMapContainer}
         setOpen={setOpenMapContainer}
+      />
+
+      <WarningModal
+        open={openWarningModal}
+        setOpen={setOpenWarningModal}
+        title={'Cancel Booking'}
       />
 
       <h1>Your bookings</h1>
@@ -57,7 +65,9 @@ export default () => {
                 <Button.Group>
                   <Button positive>Pay now</Button>
                   <Button.Or />
-                  <Button negative>Cancel</Button>
+                  <Button negative onClick={() => setOpenWarningModal(true)}>
+                    Cancel
+                  </Button>
                 </Button.Group>
               </Table.Cell>
             </Table.Row>
