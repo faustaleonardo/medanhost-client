@@ -29,6 +29,9 @@ export default () => {
       case 'revenue':
         history.push('/hosts/1/revenue');
         break;
+      case 'users':
+        history.push('/admin/users/manage');
+        break;
       default:
         break;
     }
@@ -39,14 +42,18 @@ export default () => {
       <Menu.Item name="Medanhost" />
       <Menu.Item name="home" onClick={handleItemClick} />
       {/* guest */}
-      <Menu.Item name="rooms" onClick={handleItemClick} />
+      {/* <Menu.Item name="rooms" onClick={handleItemClick} />
       <Menu.Item name="bookmarks" onClick={handleItemClick} />
-      <Menu.Item name="bookings" onClick={handleItemClick} />
+      <Menu.Item name="bookings" onClick={handleItemClick} /> */}
 
       {/* host */}
-      <Menu.Item name="my rooms" onClick={handleItemClick} />
+      {/* <Menu.Item name="my rooms" onClick={handleItemClick} />
       <Menu.Item name="upcoming bookings" onClick={handleItemClick} />
-      <Menu.Item name="revenue" onClick={handleItemClick} />
+      <Menu.Item name="revenue" onClick={handleItemClick} /> */}
+
+      {/* admin */}
+      <Menu.Item name="users" onClick={handleItemClick} />
+
       <Menu.Menu position="right">
         <Menu.Item>
           <LoginModal />

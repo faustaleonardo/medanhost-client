@@ -18,6 +18,9 @@ import MyRoomForm from 'components/host/MyRoomForm';
 import UpcomingBookings from 'components/host/UpcomingBookings';
 import Revenue from 'components/host/Revenue';
 
+// admin
+import UserList from 'components/admin/UserList';
+
 export default () => {
   return (
     <div className="py-1r">
@@ -38,6 +41,9 @@ export default () => {
           <Route exact path="/hosts/1/rooms/1/create" component={MyRoomForm} />
           <Route exact path="/hosts/1/bookings" component={UpcomingBookings} />
           <Route exact path="/hosts/1/revenue" component={Revenue} />
+
+          {/* admin */}
+          <Route exact path="/admin/users/manage" component={UserList} />
         </BrowserRouter>
       </Container>
     </div>

@@ -41,7 +41,7 @@ export default () => {
 
   return (
     <div>
-      <h1>Revenue</h1>
+      <h1 className="text-center">Revenue</h1>
       <div className="revenue-chart">
         <h3>Income based on Month This Year</h3>
         <Line data={monthsData} options={{ maintainAspectRatio: true }} />
