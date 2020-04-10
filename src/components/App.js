@@ -21,6 +21,7 @@ import Revenue from 'components/host/Revenue';
 // admin
 import UserListManagement from 'components/admin/UserListManagement';
 import RoomListManagement from 'components/admin/RoomListManagement';
+import BookingListManagement from 'components/admin/BookingListManagement';
 
 export default () => {
   return (
@@ -53,6 +54,11 @@ export default () => {
             exact
             path="/admin/rooms/manage"
             component={RoomListManagement}
+          />
+          <Route
+            exact
+            path="/admin/bookings/manage"
+            component={BookingListManagement}
           />
         </BrowserRouter>
       </Container>

@@ -35,6 +35,9 @@ export default () => {
       case 'rooms management':
         history.push('/admin/rooms/manage');
         break;
+      case 'bookings management':
+        history.push('/admin/bookings/manage');
+        break;
       default:
         break;
     }
@@ -57,6 +60,7 @@ export default () => {
       {/* admin */}
       <Menu.Item name="users management" onClick={handleItemClick} />
       <Menu.Item name="rooms management" onClick={handleItemClick} />
+      <Menu.Item name="bookings management" onClick={handleItemClick} />
 
       <Menu.Menu position="right">
         <Menu.Item>
