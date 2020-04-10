@@ -8,7 +8,7 @@ export default () => {
 
   const handleItemClick = (e, { name }) => {
     switch (name) {
-      case 'home':
+      case 'medanhost':
         history.push('/');
         break;
       case 'rooms':
@@ -38,6 +38,9 @@ export default () => {
       case 'bookings management':
         history.push('/admin/bookings/manage');
         break;
+      case 'reviews management':
+        history.push('/admin/reviews/manage');
+        break;
       default:
         break;
     }
@@ -45,8 +48,7 @@ export default () => {
 
   return (
     <Menu borderless>
-      <Menu.Item name="Medanhost" />
-      <Menu.Item name="home" onClick={handleItemClick} />
+      <Menu.Item name="medanhost" onClick={handleItemClick} />
       {/* guest */}
       {/* <Menu.Item name="rooms" onClick={handleItemClick} />
       <Menu.Item name="bookmarks" onClick={handleItemClick} />
@@ -61,6 +63,7 @@ export default () => {
       <Menu.Item name="users management" onClick={handleItemClick} />
       <Menu.Item name="rooms management" onClick={handleItemClick} />
       <Menu.Item name="bookings management" onClick={handleItemClick} />
+      <Menu.Item name="reviews management" onClick={handleItemClick} />
 
       <Menu.Menu position="right">
         <Menu.Item>

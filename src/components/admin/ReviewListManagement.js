@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, Button } from 'semantic-ui-react';
+import { Table, Button, Rating } from 'semantic-ui-react';
 import Pagination from 'components/partials/Pagination';
 import WarningModal from 'components/partials/WarningModal';
 
@@ -11,30 +11,26 @@ export default () => {
       <WarningModal
         open={openWarningModal}
         setOpen={setOpenWarningModal}
-        title={'Delete Booking'}
+        title={'Delete Review'}
       />
 
-      <h1>Bookings</h1>
+      <h1>Reviews</h1>
       <div className="mb-3r">
         <Table striped>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>ID</Table.HeaderCell>
-              <Table.HeaderCell>
+              <Table.HeaderCell singleLine>
                 <div className="text-center">Guest ID</div>
               </Table.HeaderCell>
-              <Table.HeaderCell>
+              <Table.HeaderCell singleLine>
                 <div className="text-center">Room ID</div>
               </Table.HeaderCell>
-              <Table.HeaderCell>Check in</Table.HeaderCell>
-              <Table.HeaderCell>Check out</Table.HeaderCell>
-              <Table.HeaderCell>
-                <div className="text-center">Guests</div>
+              <Table.HeaderCell>Ratings</Table.HeaderCell>
+              <Table.HeaderCell>Comments</Table.HeaderCell>
+              <Table.HeaderCell singleLine>
+                <div className="text-center">Created At</div>
               </Table.HeaderCell>
-              <Table.HeaderCell>Total</Table.HeaderCell>
-              <Table.HeaderCell>Status</Table.HeaderCell>
-              <Table.HeaderCell>Expired Date</Table.HeaderCell>
-              <Table.HeaderCell>Created At</Table.HeaderCell>
               <Table.HeaderCell>Action</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
@@ -48,17 +44,18 @@ export default () => {
               <Table.Cell>
                 <div className="text-center">5</div>
               </Table.Cell>
-              <Table.Cell>17 Apr 20</Table.Cell>
-              <Table.Cell>20 Apr 20</Table.Cell>
               <Table.Cell>
-                <div className="text-center">4</div>
+                <Rating icon="star" defaultRating={3} maxRating={5} disabled />
               </Table.Cell>
               <Table.Cell>
-                Rp 520.000 x 3 nights = <br />
-                Rp 1.560.000
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+                sunt in culpa qui officia deserunt mollit anim id est laborum.
               </Table.Cell>
-              <Table.Cell>Waiting for payment</Table.Cell>
-              <Table.Cell>15 Apr 20</Table.Cell>
               <Table.Cell>15 Apr 20</Table.Cell>
               <Table.Cell>
                 <Button

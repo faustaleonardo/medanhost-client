@@ -22,6 +22,7 @@ import Revenue from 'components/host/Revenue';
 import UserListManagement from 'components/admin/UserListManagement';
 import RoomListManagement from 'components/admin/RoomListManagement';
 import BookingListManagement from 'components/admin/BookingListManagement';
+import ReviewListManagement from 'components/admin/ReviewListManagement';
 
 export default () => {
   return (
@@ -59,6 +60,11 @@ export default () => {
             exact
             path="/admin/bookings/manage"
             component={BookingListManagement}
+          />
+          <Route
+            exact
+            path="/admin/reviews/manage"
+            component={ReviewListManagement}
           />
         </BrowserRouter>
       </Container>
