@@ -25,7 +25,7 @@ export default () => {
 
       <ReviewModal open={openReview} setOpen={setOpenReview} />
 
-      <h1>Your bookings</h1>
+      <h1>Your Bookings</h1>
       <div className="mb-3r">
         <Message info>
           <p>

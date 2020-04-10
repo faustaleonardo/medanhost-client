@@ -27,19 +27,19 @@ export default () => {
         setOpen={setOpenMapContainer}
       />
 
-      <div className="text-center">
+      <div>
         <h1>Stays in Sydney</h1>
         <p>300+ stays · Apr 10 - May 5 · 2 guests</p>
       </div>
 
-      <div className="text-center mt-1r mb-3r">
-        <Button className="mx-05r" onClick={() => setOpenTypeOfPlace(true)}>
+      <div className="mt-1r mb-3r">
+        <Button className="mr-05r" onClick={() => setOpenTypeOfPlace(true)}>
           Type of Place
         </Button>
-        <Button className="mx-05r" onClick={() => setOpenPrice(true)}>
+        <Button className="mr-05r" onClick={() => setOpenPrice(true)}>
           Price
         </Button>
-        <Button className="mx-05r" onClick={() => setOpenSearchDetails(true)}>
+        <Button className="mr-05r" onClick={() => setOpenSearchDetails(true)}>
           Search Details
         </Button>
       </div>
@@ -47,7 +47,7 @@ export default () => {
       <Grid columns={3}>
         <Grid.Row>
           <Grid.Column>
-            <Card className="center-block">
+            <Card>
               <Link to="/rooms/1">
                 <Image src="https://a0.muscache.com/im/pictures/a08c1952-7933-47c4-a5f4-82315824b471.jpg?aki_policy=large" />
               </Link>
@@ -94,7 +94,7 @@ export default () => {
           </Grid.Column>
 
           <Grid.Column>
-            <Card className="center-block">
+            <Card>
               <Link to="/rooms/1">
                 <Image src="https://a0.muscache.com/im/pictures/a08c1952-7933-47c4-a5f4-82315824b471.jpg?aki_policy=large" />
               </Link>
@@ -141,7 +141,7 @@ export default () => {
           </Grid.Column>
 
           <Grid.Column>
-            <Card className="center-block">
+            <Card>
               <Link to="/rooms/1">
                 <Image src="https://a0.muscache.com/im/pictures/a08c1952-7933-47c4-a5f4-82315824b471.jpg?aki_policy=large" />
               </Link>
