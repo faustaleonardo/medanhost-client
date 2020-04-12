@@ -21,7 +21,6 @@ export const AuthProvider = ({ children }) => {
     <Provider
       value={{
         auth: state.auth,
-        error: state.error,
         setAuth,
       }}
     >

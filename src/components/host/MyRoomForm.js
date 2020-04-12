@@ -1,25 +1,44 @@
-import React, { useRef } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useRef, useState, useEffect } from 'react';
 import { Form, Button } from 'semantic-ui-react';
+import axiosInstance from 'utils/axiosInstance';
 
 export default () => {
-  const roomTypes = [
-    { key: 'sh', value: 'sharedRoom', text: 'Shared Room' },
-    { key: 'pr', value: 'privateRoom', text: 'Private Room' },
-  ];
-
   const fileInputRef = useRef();
+  const [types, setTypes] = useState([]);
+
+  useEffect(() => {
+    const fetchTypes = async () => {
+      const response = await axiosInstance.get('/api/v1/types');
+      const result = response.data;
+      const roomTypes = [];
+
+      for (const index in result) {
+        roomTypes.push({
+          key: index,
+          value: result[index].id,
+          text: result[index].value,
+        });
+      }
+      setTypes(roomTypes);
+    };
+
+    fetchTypes();
+  }, []);
+
+  if (!types.length) return null;
 
   return (
     <div className="general-form">
       <h1>Create Room</h1>
       <Form>
         <Form.Group widths="equal">
-          <Form.Input fluid label="Name" placeholder="Check in" />
+          <Form.Input fluid label="Name" placeholder="Name" />
           <Form.Select
             fluid
             label="Room type"
             placeholder="Select your room type"
-            options={roomTypes}
+            options={types}
           ></Form.Select>
         </Form.Group>
         <Form.Field>
