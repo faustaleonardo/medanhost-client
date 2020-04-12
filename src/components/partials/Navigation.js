@@ -1,12 +1,12 @@
 import React, { useContext, Fragment } from 'react';
-import { Menu } from 'semantic-ui-react';
+import { Menu, Button } from 'semantic-ui-react';
 import LoginModal from 'components/auth/LoginModal';
 import { useHistory } from 'react-router-dom';
 import { AuthContext } from 'context/auth/authState';
 
 export default () => {
   const history = useHistory();
-  const { auth } = useContext(AuthContext);
+  const { setAuth, auth } = useContext(AuthContext);
 
   const handleItemClick = (e, { name }) => {
     switch (name) {
@@ -51,17 +51,19 @@ export default () => {
     }
   };
 
+  const logout = () => {
+    localStorage.removeItem('jwt');
+    setAuth(false);
+  };
+
   const renderContent = () => {
     switch (auth) {
       case null:
         return;
       case false:
-        break;
+        return;
       default:
-        // 1 === admin
-        // 2 === guest
-        // 3 === host
-        if (auth.roleId === 1) {
+        if (auth.role.value === 'admin') {
           return (
             <Fragment>
               <Menu.Item name="manage users" onClick={handleItemClick} />
@@ -71,7 +73,7 @@ export default () => {
               <Menu.Item name="transaction" onClick={handleItemClick} />
             </Fragment>
           );
-        } else if (auth.roleId === 2) {
+        } else if (auth.role.value === 'guest') {
           return (
             <Fragment>
               <Menu.Item name="bookmarks" onClick={handleItemClick} />
@@ -90,22 +92,21 @@ export default () => {
     }
   };
 
+  if (auth === null) return null;
+
   return (
     <Menu borderless>
       <Menu.Item name="medanhost" onClick={handleItemClick} />
-      <Menu.Item name="rooms" onClick={handleItemClick} />
-      {/* guest */}
+      {!auth || auth.role.value === 'guest' ? (
+        <Menu.Item name="rooms" onClick={handleItemClick} />
+      ) : (
+        ''
+      )}
       {renderContent()}
 
-      {/* host */}
-      {/* <Menu.Item name="my rooms" onClick={handleItemClick} />
-      <Menu.Item name="upcoming bookings" onClick={handleItemClick} />
-      <Menu.Item name="revenue" onClick={handleItemClick} /> */}
-
-      {/* admin */}
       <Menu.Menu position="right">
         <Menu.Item>
-          <LoginModal />
+          {!auth ? <LoginModal /> : <Button onClick={logout}>Logout</Button>}
         </Menu.Item>
       </Menu.Menu>
     </Menu>

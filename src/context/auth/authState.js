@@ -4,7 +4,6 @@ import authReducer from './authReducer';
 
 const initialState = {
   auth: null,
-  error: null,
 };
 
 export const AuthContext = createContext(authReducer);
@@ -18,17 +17,12 @@ export const AuthProvider = ({ children }) => {
     dispatch({ type: 'SET_AUTH', payload: data });
   };
 
-  const setError = async (data) => {
-    dispatch({ type: 'SET_ERROR', payload: data });
-  };
-
   return (
     <Provider
       value={{
         auth: state.auth,
         error: state.error,
         setAuth,
-        setError,
       }}
     >
       {children}
