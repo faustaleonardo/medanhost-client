@@ -14,7 +14,7 @@ export default () => {
 
   const handleEmailLogin = () => {
     setOpen(false);
-    history.push('/login/otp');
+    history.push(`/login/otp/${roleId}`);
   };
 
   const handleGoogleResponse = async ({ profileObj }, roleId) => {

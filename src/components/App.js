@@ -49,7 +49,7 @@ export default () => {
         <BrowserRouter>
           <Navigation />
           <Route exact path="/" component={SearchForm} />
-          <Route exact path="/login/otp" component={LoginOtp} />
+          <Route exact path="/login/otp/:roleId" component={LoginOtp} />
 
           {/* guest */}
           <Route exact path="/rooms" component={RoomList} />
