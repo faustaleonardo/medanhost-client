@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table, Button, Icon } from 'semantic-ui-react';
 import { Link, useHistory } from 'react-router-dom';
 
@@ -8,6 +8,8 @@ import WarningModal from 'components/partials/WarningModal';
 export default () => {
   const [openWarningModal, setOpenWarningModal] = useState(false);
   const history = useHistory();
+
+  useEffect(() => {}, []);
 
   return (
     <div>

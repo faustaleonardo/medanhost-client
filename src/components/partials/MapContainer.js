@@ -12,9 +12,9 @@ const mapContainer = ({ google }) => {
       google={google}
       zoom={6}
       style={mapStyles}
-      initialCenter={{ lat: 47.444, lng: -122.176 }}
+      initialCenter={{ lat: 3.58333, lng: 98.66667 }}
     >
-      <Marker position={{ lat: 48, lng: -122.0 }} />
+      <Marker position={{ lat: 3.58333, lng: 98.66667 }} />
     </Map>
   );
 };
