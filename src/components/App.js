@@ -34,8 +34,11 @@ export default () => {
   useEffect(() => {
     const fetchAuth = async () => {
       const jwtToken = localStorage.getItem('jwt_token');
-      if (!jwtToken) setAuth(false);
-      // const response = await axiosInstance.get('api/v1/users/1');
+      if (!jwtToken) return setAuth(false);
+
+      const response = await axiosInstance.get('api/v1/users/auth');
+      if (response.status === 200) setAuth(response.data);
+      else setAuth(false);
     };
     fetchAuth();
   }, []);
