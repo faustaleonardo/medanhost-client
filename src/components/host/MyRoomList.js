@@ -6,12 +6,16 @@ import axiosInstance from 'utils/axiosInstance';
 
 import WarningModal from 'components/partials/WarningModal';
 import { RoomContext } from 'context/rooms/roomState';
+import MapModal from 'components/modals/MapModal';
+import formatCurrency from 'utils/formatCurrency';
 
 export default () => {
   const history = useHistory();
   const { rooms, setRooms, deleteRoom } = useContext(RoomContext);
 
   const [openWarningModal, setOpenWarningModal] = useState(false);
+  const [openMapModal, setOpenMapModal] = useState(false);
+  const [position, setPosition] = useState([]);
   const [roomId, setRoomId] = useState(null);
 
   useEffect(() => {
@@ -56,7 +60,14 @@ export default () => {
           <Table.Cell>
             {room.location} <br />
             <div className="mt-05r">
-              <Button icon labelPosition="left">
+              <Button
+                icon
+                labelPosition="left"
+                onClick={() => {
+                  setPosition([51.505, -0.09]);
+                  setOpenMapModal(true);
+                }}
+              >
                 <Icon name="map marker alternate" />
                 Show Location
               </Button>
@@ -67,7 +78,7 @@ export default () => {
             {room.beds} Beds <br />
             {room.baths} Baths <br />
           </Table.Cell>
-          <Table.Cell>{room.price}</Table.Cell>
+          <Table.Cell>{formatCurrency(room.price)}</Table.Cell>
           <Table.Cell>
             <Button.Group>
               <Button>Update</Button>
@@ -94,6 +105,12 @@ export default () => {
         title={'Delete Room'}
       />
 
+      <MapModal
+        open={openMapModal}
+        setOpen={setOpenMapModal}
+        position={position}
+      />
+
       <h1>Your Rooms</h1>
 
       <div className="mb-1r">
@@ -109,7 +126,7 @@ export default () => {
               <Table.HeaderCell>Types Of Place</Table.HeaderCell>
               <Table.HeaderCell>Location</Table.HeaderCell>
               <Table.HeaderCell>Brief Description</Table.HeaderCell>
-              <Table.HeaderCell>Price</Table.HeaderCell>
+              <Table.HeaderCell>Price / Night</Table.HeaderCell>
               <Table.HeaderCell>Action</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
