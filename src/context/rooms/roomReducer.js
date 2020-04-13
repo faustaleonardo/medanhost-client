@@ -6,9 +6,21 @@ export default (state, action) => {
       return { ...state, rooms: payload };
     case 'ADD_ROOM':
       return { ...state, rooms: [...state.rooms, payload] };
+    case 'UPDATE_ROOM':
+      const rooms = state.rooms.map((room) => {
+        if (room.id === payload.id) room[payload.id] = payload;
+        return room;
+      });
+
+      return {
+        ...state,
+        rooms,
+      };
     case 'DELETE_ROOM':
-      const rooms = [...state.rooms].filter((room) => room.id !== payload);
-      return { ...state, rooms };
+      return {
+        ...state,
+        rooms: state.rooms.filter((room) => room.id !== payload),
+      };
     default:
       return state;
   }

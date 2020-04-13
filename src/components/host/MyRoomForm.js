@@ -6,19 +6,23 @@ import React, {
   Fragment,
   useContext,
 } from 'react';
-import { Form, Button, Message } from 'semantic-ui-react';
+import { Form, Button, Message, Card, Icon } from 'semantic-ui-react';
 import axiosInstance from 'utils/axiosInstance';
 import LocationModal from './modals/LocationModal';
 import { RoomContext } from 'context/rooms/roomState';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
+import WarningModal from 'components/partials/WarningModal';
 
-export default () => {
-  const { addRoom } = useContext(RoomContext);
+export default ({ title, buttonName }) => {
+  const { addRoom, updateRoom } = useContext(RoomContext);
   const history = useHistory();
+
+  const { id } = useParams();
 
   const fileInputRef = useRef();
   const [types, setTypes] = useState([]);
   const [openLocation, setOpenLocation] = useState(false);
+  const [openWarningModal, setOpenWarningModal] = useState(false);
   const [error, setError] = useState(null);
   const [loadingCreate, setLoadingCreate] = useState(false);
 
@@ -33,6 +37,8 @@ export default () => {
   const [description, setDescription] = useState('');
   const [guests, setGuests] = useState(0);
   const [price, setPrice] = useState(0);
+  const [pictures, setPictures] = useState([]);
+  const [pictureId, setPictureId] = useState('');
   /**---------------------------end: fields-------------------------------- */
 
   useEffect(() => {
@@ -52,6 +58,26 @@ export default () => {
     };
 
     fetchTypes();
+
+    /**---------------------------start: fetching data for updating item-------------------------------- */
+    const fetchRoom = async () => {
+      const response = await axiosInstance.get(`/api/v1/rooms/${id}`);
+      const room = response.data;
+
+      setName(room.name);
+      setLocation(room.location);
+      setType(room.type.id);
+      setBedrooms(room.bedrooms);
+      setBeds(room.beds);
+      setBaths(room.baths);
+      setDescription(room.description);
+      setGuests(room.guests);
+      setPrice(room.price);
+      setPictures(room.pictures);
+    };
+    /**---------------------------end: fetching data for updating item-------------------------------- */
+
+    if (id) fetchRoom();
   }, []);
 
   const uploadFileToServer = async (roomId) => {
@@ -62,7 +88,31 @@ export default () => {
     await axiosInstance.post(`/api/v1/pictures/rooms/${roomId}`, formData);
   };
 
-  const handleCreate = async () => {
+  const handleDeletePicture = async (pictureId) => {
+    await axiosInstance.delete(`/api/v1/pictures/${pictureId}`);
+    window.location.reload();
+  };
+
+  /**---------------------------start: for rendering separate component-------------------------------- */
+  const renderPictures = () => {
+    return pictures.map((picture) => {
+      return (
+        <Card
+          key={picture.id}
+          image={picture.path}
+          extra={
+            <Button basic color="red" onClick={() => setPictureId(picture.id)}>
+              <Icon name="trash" />
+              Delete
+            </Button>
+          }
+        />
+      );
+    });
+  };
+  /**---------------------------end: for rendering separate component-------------------------------- */
+
+  const handleSubmit = async () => {
     /**---------------------------validation------------------------ */
     if (
       !name ||
@@ -84,7 +134,7 @@ export default () => {
     if (baths < 0) return setError('Baths must be greater than 0');
     if (guests < 0) return setError('Guests must be greater than 0');
     if (price < 0) return setError('Price must be greater than 0');
-    /**end: ---------------------------validation------------------------ */
+    /** ---------------------------end: validation------------------------ */
 
     const data = {
       name,
@@ -99,10 +149,19 @@ export default () => {
     };
 
     try {
+      let room, response;
       setLoadingCreate(true);
-      const response = await axiosInstance.post('/api/v1/rooms', data);
-      const room = response.data;
-      addRoom(room);
+
+      if (!id) {
+        response = await axiosInstance.post('/api/v1/rooms', data);
+        room = response.data;
+        addRoom(room);
+      } else {
+        response = await axiosInstance.patch('/api/v1/rooms', data);
+        room = response.data;
+        updateRoom(room);
+      }
+
       await uploadFileToServer(room.id);
       setLoadingCreate(false);
       history.push('/host/rooms');
@@ -122,8 +181,17 @@ export default () => {
         location={location}
         setLocation={setLocation}
       />
+
+      <WarningModal
+        open={openWarningModal}
+        setOpen={setOpenWarningModal}
+        id={pictureId}
+        action={handleDeletePicture}
+        title={'Delete Room'}
+      />
+
       <div className="general-form">
-        <h1>Create Room</h1>
+        <h1>{title}</h1>
         {error ? <Message negative>{error}</Message> : ''}
 
         <Form>
@@ -139,6 +207,7 @@ export default () => {
               fluid
               label="Room type"
               placeholder="Select your room type"
+              value={type}
               options={types}
               onChange={(event, data) => {
                 setType(data.value);
@@ -162,6 +231,7 @@ export default () => {
           </Form.Field>
           <Form.Field>
             <label>Pictures</label>
+            <Card.Group itemsPerRow={3}>{renderPictures()}</Card.Group>
             <p>{images.length} files</p>
             <Button
               content="Choose File"
@@ -232,10 +302,10 @@ export default () => {
           <Form.Field
             control={Button}
             positive
-            onClick={handleCreate}
+            onClick={handleSubmit}
             loading={loadingCreate}
           >
-            Create
+            {buttonName}
           </Form.Field>
         </Form>
       </div>

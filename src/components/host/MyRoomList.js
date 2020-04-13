@@ -26,7 +26,6 @@ export default () => {
 
       setRooms(data);
     };
-
     fetchRooms();
   }, []);
 
@@ -94,7 +93,11 @@ export default () => {
           <Table.Cell>{formatCurrency(room.price)}</Table.Cell>
           <Table.Cell>
             <Button.Group>
-              <Button>Update</Button>
+              <Button
+                onClick={() => history.push(`/host/rooms/${room.id}/update`)}
+              >
+                Update
+              </Button>
               <Button.Or />
               <Button negative onClick={() => handleDeleteModal(room.id)}>
                 Delete

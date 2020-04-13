@@ -59,10 +59,32 @@ export default () => {
           <Route exact path="/bookings" component={BookingList} />
 
           {/* host */}
-
           <RoomProvider>
             <Route exact path="/host/rooms" component={MyRoomList} />
-            <Route exact path="/host/rooms/create" component={MyRoomForm} />
+
+            <Route
+              exact
+              path="/host/rooms/create"
+              render={(props) => (
+                <MyRoomForm
+                  {...props}
+                  title="Create a Room"
+                  buttonName="Create"
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/host/rooms/:id/update"
+              render={(props) => (
+                <MyRoomForm
+                  {...props}
+                  title="Update the Room"
+                  buttonName="Update"
+                />
+              )}
+            />
+
             <Route exact path="/host/bookings" component={UpcomingBookings} />
             <Route exact path="/host/revenue" component={Revenue} />
           </RoomProvider>

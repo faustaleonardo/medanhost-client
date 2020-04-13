@@ -21,6 +21,10 @@ export const RoomProvider = ({ children }) => {
     dispatch({ type: 'ADD_ROOM', payload: data });
   };
 
+  const updateRoom = async (data) => {
+    dispatch({ type: 'UPDATE_ROOM', payload: data });
+  };
+
   const deleteRoom = async (id) => {
     dispatch({ type: 'DELETE_ROOM', payload: id });
   };
@@ -33,6 +37,7 @@ export const RoomProvider = ({ children }) => {
         setRooms,
         addRoom,
         deleteRoom,
+        updateRoom,
       }}
     >
       {children}
