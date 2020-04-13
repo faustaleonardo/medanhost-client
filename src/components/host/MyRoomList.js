@@ -3,6 +3,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Table, Button, Icon } from 'semantic-ui-react';
 import { Link, useHistory } from 'react-router-dom';
 import axiosInstance from 'utils/axiosInstance';
+import * as opencage from 'opencage-api-client';
 
 import WarningModal from 'components/partials/WarningModal';
 import { RoomContext } from 'context/rooms/roomState';
@@ -28,6 +29,19 @@ export default () => {
 
     fetchRooms();
   }, []);
+
+  const handleShowLocation = async (location) => {
+    const response = await opencage.geocode({
+      key: process.env.REACT_APP_OPENCAGE_API_KEY,
+      q: location,
+    });
+    const { geometry } = response.results[0];
+    const lat = geometry.lat;
+    const lng = geometry.lng;
+
+    setPosition([lat, lng]);
+    setOpenMapModal(true);
+  };
 
   const handleDeleteModal = (roomId) => {
     setRoomId(roomId);
@@ -64,8 +78,7 @@ export default () => {
                 icon
                 labelPosition="left"
                 onClick={() => {
-                  setPosition([51.505, -0.09]);
-                  setOpenMapModal(true);
+                  handleShowLocation(room.location);
                 }}
               >
                 <Icon name="map marker alternate" />
