@@ -51,7 +51,12 @@ export default () => {
           </Form.Group>
           <Form.Field>
             <label>Location</label>
-            <Button onClick={openLocation}>Open</Button>
+            <Button
+              onClick={openLocation}
+              icon="map marker"
+              labelPosition="left"
+              content="Choose Location"
+            />
           </Form.Field>
           <Form.Field>
             <label>Pictures</label>
