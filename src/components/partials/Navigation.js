@@ -23,13 +23,13 @@ export default () => {
         history.push('/rooms/bookmarks');
         break;
       case 'my rooms':
-        history.push('/hosts/1/rooms');
+        history.push('/host/rooms');
         break;
       case 'upcoming bookings':
-        history.push('/hosts/1/bookings');
+        history.push('/host/bookings');
         break;
       case 'revenue':
-        history.push('/hosts/1/revenue');
+        history.push('/host/revenue');
         break;
       case 'manage users':
         history.push('/admin/users/manage');

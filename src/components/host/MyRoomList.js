@@ -22,10 +22,7 @@ export default () => {
       <h1>Your Rooms</h1>
 
       <div className="mb-1r">
-        <Button
-          positive
-          onClick={() => history.push('/hosts/1/rooms/1/create')}
-        >
+        <Button positive onClick={() => history.push('/host/rooms/create')}>
           Create
         </Button>
       </div>

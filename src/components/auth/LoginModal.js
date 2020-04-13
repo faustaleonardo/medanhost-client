@@ -33,7 +33,7 @@ export default () => {
       setOpen(false);
       setAuth(user);
       localStorage.setItem('jwt', jwt);
-      history.push(`/hosts/${user.id}/rooms`);
+      history.push(`/host/rooms`);
     } catch (err) {
       setError(err.response.data.message);
     }

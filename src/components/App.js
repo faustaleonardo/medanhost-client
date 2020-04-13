@@ -3,6 +3,7 @@ import React, { useEffect, useContext } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 import { Container } from 'semantic-ui-react';
 import { AuthContext } from 'context/auth/authState';
+import { RoomProvider } from 'context/rooms/roomState';
 import axiosInstance from 'utils/axiosInstance';
 
 import Navigation from 'components/partials/Navigation';
@@ -58,10 +59,13 @@ export default () => {
           <Route exact path="/bookings" component={BookingList} />
 
           {/* host */}
-          <Route exact path="/hosts/1/rooms" component={MyRoomList} />
-          <Route exact path="/hosts/1/rooms/1/create" component={MyRoomForm} />
-          <Route exact path="/hosts/1/bookings" component={UpcomingBookings} />
-          <Route exact path="/hosts/1/revenue" component={Revenue} />
+
+          <RoomProvider>
+            <Route exact path="/host/rooms" component={MyRoomList} />
+            <Route exact path="/host/rooms/create" component={MyRoomForm} />
+            <Route exact path="/host/bookings" component={UpcomingBookings} />
+            <Route exact path="/host/revenue" component={Revenue} />
+          </RoomProvider>
 
           {/* admin */}
           <Route exact path="/admin/users/manage" component={ManageUserList} />

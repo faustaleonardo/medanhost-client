@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import { Modal, Form, List, Button, Loader, Dimmer } from 'semantic-ui-react';
 import * as opencage from 'opencage-api-client';
 
-export default ({ open, setOpen }) => {
+export default ({ open, setOpen, location, setLocation }) => {
   const [query, setQuery] = useState('');
   const [locationOptions, setLocationOptions] = useState([]);
-  const [location, setLocation] = useState('');
   const [loadingLocation, setLoadingLocation] = useState(false);
 
   const searchLocation = async () => {
@@ -47,8 +46,13 @@ export default ({ open, setOpen }) => {
     });
   };
 
+  const handleCloseModal = () => {
+    setLocationOptions([]);
+    setOpen(false);
+  };
+
   return (
-    <Modal size={'small'} open={open} onClose={() => setOpen(false)}>
+    <Modal size={'small'} open={open} onClose={handleCloseModal}>
       <Modal.Header>Choose your location</Modal.Header>
       <Modal.Content>
         <p>My location is at {location}</p>
@@ -71,11 +75,7 @@ export default ({ open, setOpen }) => {
         </Dimmer>
       </Modal.Content>
       <Modal.Actions>
-        <Button
-          positive
-          disabled={location ? false : true}
-          onClick={() => setOpen(false)}
-        >
+        <Button positive onClick={handleCloseModal}>
           Done
         </Button>
       </Modal.Actions>
