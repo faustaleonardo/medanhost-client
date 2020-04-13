@@ -1,21 +1,96 @@
-import React, { useState, useEffect } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect, useContext } from 'react';
 import { Table, Button, Icon } from 'semantic-ui-react';
 import { Link, useHistory } from 'react-router-dom';
+import axiosInstance from 'utils/axiosInstance';
 
-import Pagination from 'components/partials/Pagination';
 import WarningModal from 'components/partials/WarningModal';
+import { RoomContext } from 'context/rooms/roomState';
 
 export default () => {
-  const [openWarningModal, setOpenWarningModal] = useState(false);
   const history = useHistory();
+  const { rooms, setRooms, deleteRoom } = useContext(RoomContext);
 
-  useEffect(() => {}, []);
+  const [openWarningModal, setOpenWarningModal] = useState(false);
+  const [roomId, setRoomId] = useState(null);
+
+  useEffect(() => {
+    const fetchRooms = async () => {
+      const response = await axiosInstance.get('/api/v1/rooms');
+      const data = response.data;
+
+      setRooms(data);
+    };
+
+    fetchRooms();
+  }, []);
+
+  const handleDeleteModal = (roomId) => {
+    setRoomId(roomId);
+    setOpenWarningModal(true);
+  };
+
+  const handleDeleteRoom = async (roomId) => {
+    try {
+      // delete pictures
+      await axiosInstance.delete(`/api/v1/pictures/rooms/${roomId}`);
+
+      // delete room
+      await axiosInstance.delete(`/api/v1/rooms/${roomId}`);
+
+      deleteRoom(roomId);
+      setOpenWarningModal(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const renderContent = () => {
+    return rooms.map((room) => {
+      return (
+        <Table.Row key={room.id}>
+          <Table.Cell>
+            <Link to={'rooms/' + room.id}>{room.name}</Link>
+          </Table.Cell>
+          <Table.Cell>{room.type.value}</Table.Cell>
+          <Table.Cell>
+            {room.location} <br />
+            <div className="mt-05r">
+              <Button icon labelPosition="left">
+                <Icon name="map marker alternate" />
+                Show Location
+              </Button>
+            </div>
+          </Table.Cell>
+          <Table.Cell>
+            {room.bedrooms}Bedrooms <br />
+            {room.beds} Beds <br />
+            {room.baths} Baths <br />
+          </Table.Cell>
+          <Table.Cell>{room.price}</Table.Cell>
+          <Table.Cell>
+            <Button.Group>
+              <Button>Update</Button>
+              <Button.Or />
+              <Button negative onClick={() => handleDeleteModal(room.id)}>
+                Delete
+              </Button>
+            </Button.Group>
+          </Table.Cell>
+        </Table.Row>
+      );
+    });
+  };
+
+  if (!rooms.length) return null;
 
   return (
     <div>
       <WarningModal
         open={openWarningModal}
         setOpen={setOpenWarningModal}
+        id={roomId}
+        action={handleDeleteRoom}
         title={'Delete Room'}
       />
 
@@ -39,98 +114,9 @@ export default () => {
             </Table.Row>
           </Table.Header>
 
-          <Table.Body>
-            <Table.Row>
-              <Table.Cell>
-                <Link to="/rooms/1">CBD Ayola</Link>
-              </Table.Cell>
-              <Table.Cell>Shared Room</Table.Cell>
-              <Table.Cell>
-                Jalan Ustad Abdul Hamid No.32, Tanjungbalai <br />
-                <div className="mt-05r">
-                  <Button icon labelPosition="left">
-                    <Icon name="map marker alternate" />
-                    Show Location
-                  </Button>
-                </div>
-              </Table.Cell>
-              <Table.Cell>
-                1 Bedroom <br />
-                2 Beds <br />
-                2 Baths <br />
-              </Table.Cell>
-              <Table.Cell>
-                1 guest / night = Rp 500.000 <br />
-                2 guests / night = Rp 510.000 <br />
-                3 guests / night = Rp 520.000 <br />
-                4 guests / night = Rp 530.000 <br />
-              </Table.Cell>
-              <Table.Cell>
-                <Button.Group>
-                  <Button>Update</Button>
-                  <Button.Or />
-                  <Button negative onClick={() => setOpenWarningModal(true)}>
-                    Delete
-                  </Button>
-                </Button.Group>
-              </Table.Cell>
-            </Table.Row>
-          </Table.Body>
-        </Table>
-
-        <Table striped>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Name</Table.HeaderCell>
-              <Table.HeaderCell>Types Of Place</Table.HeaderCell>
-              <Table.HeaderCell>Location</Table.HeaderCell>
-              <Table.HeaderCell>Brief Description</Table.HeaderCell>
-              <Table.HeaderCell>Price</Table.HeaderCell>
-              <Table.HeaderCell>Action</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-
-          <Table.Body>
-            <Table.Row>
-              <Table.Cell>
-                <Link to="/rooms/1">CBD Ayola</Link>
-              </Table.Cell>
-              <Table.Cell>Shared Room</Table.Cell>
-              <Table.Cell>
-                Jalan Ustad Abdul Hamid No.32, Tanjungbalai <br />
-                <div className="mt-05r">
-                  <Button icon labelPosition="left">
-                    <Icon name="map marker alternate" />
-                    Show Location
-                  </Button>
-                </div>
-              </Table.Cell>
-              <Table.Cell>
-                1 Bedroom <br />
-                2 Beds <br />
-                2 Baths <br />
-              </Table.Cell>
-              <Table.Cell>
-                1 guest / night = Rp 500.000 <br />
-                2 guests / night = Rp 510.000 <br />
-                3 guests / night = Rp 520.000 <br />
-                4 guests / night = Rp 530.000 <br />
-              </Table.Cell>
-              <Table.Cell>
-                <Button.Group>
-                  <Button>Update</Button>
-                  <Button.Or />
-                  <Button negative onClick={() => setOpenWarningModal(true)}>
-                    Delete
-                  </Button>
-                </Button.Group>
-              </Table.Cell>
-            </Table.Row>
-          </Table.Body>
+          <Table.Body>{renderContent()}</Table.Body>
         </Table>
       </div>
-
-      <Pagination />
     </div>
   );
 };

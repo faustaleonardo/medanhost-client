@@ -20,6 +20,7 @@ export default () => {
   const [types, setTypes] = useState([]);
   const [openLocation, setOpenLocation] = useState(false);
   const [error, setError] = useState(null);
+  const [loadingCreate, setLoadingCreate] = useState(false);
 
   /**---------------------------start: fields-------------------------------- */
   const [name, setName] = useState('');
@@ -98,10 +99,12 @@ export default () => {
     };
 
     try {
+      setLoadingCreate(true);
       const response = await axiosInstance.post('/api/v1/rooms', data);
       const room = response.data;
       addRoom(room);
       await uploadFileToServer(room.id);
+      setLoadingCreate(false);
       history.push('/host/rooms');
     } catch (err) {
       console.log(err.response.data);
@@ -226,7 +229,12 @@ export default () => {
               onChange={(event) => setPrice(event.target.value)}
             />
           </Form.Group>
-          <Form.Field control={Button} positive onClick={handleCreate}>
+          <Form.Field
+            control={Button}
+            positive
+            onClick={handleCreate}
+            loading={loadingCreate}
+          >
             Create
           </Form.Field>
         </Form>
