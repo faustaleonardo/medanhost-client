@@ -1,23 +1,118 @@
-import React, { useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useContext, useEffect } from 'react';
 import { Table, Button, Icon } from 'semantic-ui-react';
-import Pagination from 'components/partials/Pagination';
+import * as opencage from 'opencage-api-client';
+
 import WarningModal from 'components/partials/WarningModal';
-import MapContainerModal from 'components/rooms/modals/MapContainerModal';
+import MapModal from 'components/modals/MapModal';
+import axiosInstance from 'utils/axiosInstance';
+import { RoomContext } from 'context/rooms/roomState';
 
 export default () => {
+  const { rooms, setRooms, deleteRoom } = useContext(RoomContext);
+
   const [openWarningModal, setOpenWarningModal] = useState(false);
-  const [openMapContainer, setOpenMapContainer] = useState(false);
+  const [openMapModal, setOpenMapModal] = useState(false);
+  const [position, setPosition] = useState([]);
+  const [roomId, setRoomId] = useState(null);
+
+  useEffect(() => {
+    const fetchRooms = async () => {
+      const response = await axiosInstance.get('/api/v1/rooms');
+      const data = response.data;
+
+      setRooms(data);
+    };
+
+    fetchRooms();
+  }, []);
+
+  const handleShowLocation = async (location) => {
+    const response = await opencage.geocode({
+      key: process.env.REACT_APP_OPENCAGE_API_KEY,
+      q: location,
+    });
+    const { geometry } = response.results[0];
+    const lat = geometry.lat;
+    const lng = geometry.lng;
+
+    setPosition([lat, lng]);
+    setOpenMapModal(true);
+  };
+
+  const handleDeleteModal = (roomId) => {
+    setRoomId(roomId);
+    setOpenWarningModal(true);
+  };
+
+  const handleDeleteRoom = async (roomId) => {
+    try {
+      // delete pictures
+      await axiosInstance.delete(`/api/v1/pictures/rooms/${roomId}`);
+
+      // delete room
+      await axiosInstance.delete(`/api/v1/rooms/${roomId}`);
+
+      deleteRoom(roomId);
+      setOpenWarningModal(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const renderContent = () => {
+    return rooms.map((room) => {
+      return (
+        <Table.Row key={room.id}>
+          <Table.Cell>{room.id}</Table.Cell>
+          <Table.Cell>{room.name}</Table.Cell>
+          <Table.Cell>{room.type.value}</Table.Cell>
+          <Table.Cell>
+            {room.location}
+            <div className="mt-05r">
+              <Button
+                icon
+                labelPosition="left"
+                onClick={() => handleShowLocation(room.location)}
+              >
+                <Icon name="map marker alternate" />
+                Show Location
+              </Button>
+            </div>
+          </Table.Cell>
+          <Table.Cell>
+            {room.guests} guests · {room.bedrooms} bedrooms · {room.beds} beds ·{' '}
+            {room.baths} baths
+          </Table.Cell>
+          <Table.Cell>
+            <div className="text-center">4</div>
+          </Table.Cell>
+          <Table.Cell>
+            <Button negative onClick={() => handleDeleteModal(room.id)}>
+              Delete
+            </Button>
+          </Table.Cell>
+        </Table.Row>
+      );
+    });
+  };
+
+  if (!rooms.length) return null;
 
   return (
     <div>
       <WarningModal
         open={openWarningModal}
         setOpen={setOpenWarningModal}
+        id={roomId}
+        action={handleDeleteRoom}
         title={'Delete Room'}
       />
-      <MapContainerModal
-        open={openMapContainer}
-        setOpen={setOpenMapContainer}
+
+      <MapModal
+        open={openMapModal}
+        setOpen={setOpenMapModal}
+        position={position}
       />
 
       <h1>Rooms</h1>
@@ -37,44 +132,9 @@ export default () => {
             </Table.Row>
           </Table.Header>
 
-          <Table.Body>
-            <Table.Row>
-              <Table.Cell>1</Table.Cell>
-              <Table.Cell>CBD Ayola</Table.Cell>
-              <Table.Cell>Shared Room</Table.Cell>
-              <Table.Cell>
-                Jalan Ustad Abdul Hamid No.32, Tanjungbalai
-                <div className="mt-05r">
-                  <Button
-                    icon
-                    labelPosition="left"
-                    onClick={() => setOpenMapContainer(true)}
-                  >
-                    <Icon name="map marker alternate" />
-                    Show Location
-                  </Button>
-                </div>
-              </Table.Cell>
-              <Table.Cell>4 guests · 2 bedrooms · 2 beds · 2 baths</Table.Cell>
-              <Table.Cell>
-                <div className="text-center">4</div>
-              </Table.Cell>
-              <Table.Cell>
-                <Button
-                  negative
-                  onClick={() => {
-                    setOpenWarningModal(true);
-                  }}
-                >
-                  Delete
-                </Button>
-              </Table.Cell>
-            </Table.Row>
-          </Table.Body>
+          <Table.Body>{renderContent()}</Table.Body>
         </Table>
       </div>
-
-      <Pagination />
     </div>
   );
 };
