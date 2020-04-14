@@ -146,6 +146,6 @@
 }
 
 .leaflet-container {
-  height: 600px;
+  height: 50vh;
   width: 100%;
 }

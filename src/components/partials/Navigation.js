@@ -13,9 +13,6 @@ export default () => {
       case 'medanhost':
         history.push('/');
         break;
-      case 'rooms':
-        history.push('/rooms');
-        break;
       case 'bookings':
         history.push('/bookings');
         break;
@@ -98,11 +95,6 @@ export default () => {
   return (
     <Menu borderless>
       <Menu.Item name="medanhost" onClick={handleItemClick} />
-      {!auth || auth.role.value === 'guest' ? (
-        <Menu.Item name="rooms" onClick={handleItemClick} />
-      ) : (
-        ''
-      )}
       {renderContent()}
 
       <Menu.Menu position="right">

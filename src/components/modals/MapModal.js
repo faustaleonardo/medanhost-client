@@ -5,7 +5,7 @@ import { Modal, Button } from 'semantic-ui-react';
 export default ({ open, setOpen, position }) => {
   return (
     <Modal size={'small'} open={open} onClose={() => setOpen(false)}>
-      <Modal.Header>Place Location</Modal.Header>
+      <Modal.Header>Location</Modal.Header>
       <Modal.Content>
         <Map center={position} zoom={16}>
           <TileLayer

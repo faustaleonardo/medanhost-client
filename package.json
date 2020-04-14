@@ -20,6 +20,7 @@
     "react-responsive-carousel": "^3.1.57",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
+    "semantic-ui-calendar-react": "^0.15.3",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.88.2"
   },
