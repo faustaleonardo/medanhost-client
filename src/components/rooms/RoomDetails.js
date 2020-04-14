@@ -81,7 +81,6 @@ export default () => {
       guests: search.guests * 1,
       price,
     };
-    console.log(data);
 
     try {
       setLoadingConfirm(true);
