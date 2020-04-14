@@ -13,15 +13,15 @@ export const BookingProvider = ({ children }) => {
   const [state, dispatch] = useReducer(bookingReducer, initialState);
 
   // actions
-  const setBookings = async (data) => {
+  const setBookings = (data) => {
     dispatch({ type: 'SET_BOOKINGS', payload: data });
   };
 
-  const addBooking = async (data) => {
+  const addBooking = (data) => {
     dispatch({ type: 'ADD_BOOKING', payload: data });
   };
 
-  const updateBooking = async (data) => {
+  const updateBooking = (data) => {
     dispatch({ type: 'UPDATE_BOOKING', payload: data });
   };
 
