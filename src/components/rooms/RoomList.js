@@ -30,15 +30,22 @@ export default () => {
 
   useEffect(() => {
     const fetchRooms = async () => {
-      const queryString = `location=${search.location}&guests=${search.guests}&checkInDate=${search.checkInDate}&minPrice=${minPrice}&maxPrice=${maxPrice}&type=${type}`;
+      if (
+        (minPrice === '' && maxPrice === '') ||
+        (maxPrice.length && minPrice.length)
+      ) {
+        const queryString = `location=${search.location}&guests=${search.guests}&checkInDate=${search.checkInDate}&minPrice=${minPrice}&maxPrice=${maxPrice}&type=${type}`;
 
-      const response = await axiosInstance.get(`/api/v1/rooms?${queryString}`);
-      const data = response.data;
+        const response = await axiosInstance.get(
+          `/api/v1/rooms?${queryString}`
+        );
+        const data = response.data;
 
-      // show only rooms available
-      const result = data.filter((el) => el.bookings.length === 0);
+        // show only rooms available
+        const result = data.filter((el) => el.bookings.length === 0);
 
-      setRooms(result);
+        setRooms(result);
+      }
     };
 
     if (search) fetchRooms();
@@ -57,9 +64,15 @@ export default () => {
     setOpenMapModal(true);
   };
 
-  const updateTypeToSearch = (typesArr) => {
+  const handleSubmitType = (typesArr) => {
     if (typesArr.length) setType(typesArr.toString());
     setOpenTypeOfPlace(false);
+  };
+
+  const handleSubmitPrice = (minPrice, maxPrice) => {
+    setMinPrice(minPrice);
+    setMaxPrice(maxPrice);
+    setOpenPrice(false);
   };
 
   if (!search) return <Redirect to="/" />;
@@ -120,9 +133,13 @@ export default () => {
       <TypeOfPlaceModal
         open={openTypeOfPlace}
         setOpen={setOpenTypeOfPlace}
-        action={updateTypeToSearch}
+        action={handleSubmitType}
       />
-      <PriceModal open={openPrice} setOpen={setOpenPrice} />
+      <PriceModal
+        open={openPrice}
+        setOpen={setOpenPrice}
+        action={handleSubmitPrice}
+      />
       <SearchDetailsModal
         open={openSearchDetails}
         setOpen={setOpenSearchDetails}
