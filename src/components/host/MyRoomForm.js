@@ -24,7 +24,7 @@ export default ({ title, buttonName }) => {
   const [openLocation, setOpenLocation] = useState(false);
   const [openWarningModal, setOpenWarningModal] = useState(false);
   const [error, setError] = useState(null);
-  const [loadingCreate, setLoadingCreate] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   /**---------------------------start: fields-------------------------------- */
   const [name, setName] = useState('');
@@ -88,6 +88,11 @@ export default ({ title, buttonName }) => {
     await axiosInstance.post(`/api/v1/pictures/rooms/${roomId}`, formData);
   };
 
+  const handleDeleteModal = (pictureId) => {
+    setPictureId(pictureId);
+    setOpenWarningModal(true);
+  };
+
   const handleDeletePicture = async (pictureId) => {
     await axiosInstance.delete(`/api/v1/pictures/${pictureId}`);
     window.location.reload();
@@ -101,7 +106,11 @@ export default ({ title, buttonName }) => {
           key={picture.id}
           image={picture.path}
           extra={
-            <Button basic color="red" onClick={() => setPictureId(picture.id)}>
+            <Button
+              basic
+              color="red"
+              onClick={() => handleDeleteModal(picture.id)}
+            >
               <Icon name="trash" />
               Delete
             </Button>
@@ -117,7 +126,6 @@ export default ({ title, buttonName }) => {
     if (
       !name ||
       !type ||
-      !images ||
       !location ||
       !bedrooms ||
       !beds ||
@@ -150,24 +158,24 @@ export default ({ title, buttonName }) => {
 
     try {
       let room, response;
-      setLoadingCreate(true);
+      setLoading(true);
 
       if (!id) {
         response = await axiosInstance.post('/api/v1/rooms', data);
         room = response.data;
         addRoom(room);
       } else {
-        response = await axiosInstance.patch('/api/v1/rooms', data);
+        console.log('hello');
+        response = await axiosInstance.patch(`/api/v1/rooms/${id}`, data);
         room = response.data;
         updateRoom(room);
       }
 
-      await uploadFileToServer(room.id);
-      setLoadingCreate(false);
+      if (images) await uploadFileToServer(room.id);
+      setLoading(false);
       history.push('/host/rooms');
     } catch (err) {
       console.log(err.response.data);
-
       setError(err.response.data);
     }
   };
@@ -303,7 +311,7 @@ export default ({ title, buttonName }) => {
             control={Button}
             positive
             onClick={handleSubmit}
-            loading={loadingCreate}
+            loading={loading}
           >
             {buttonName}
           </Form.Field>
