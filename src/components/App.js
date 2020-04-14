@@ -6,6 +6,7 @@ import { AuthContext } from 'context/auth/authState';
 import { RoomProvider } from 'context/rooms/roomState';
 import { UserProvider } from 'context/users/userState';
 import { SearchProvider } from 'context/searches/searchState';
+import { BookingProvider } from 'context/bookings/bookingState';
 import axiosInstance from 'utils/axiosInstance';
 
 import Navigation from 'components/partials/Navigation';
@@ -61,7 +62,9 @@ export default () => {
               <Route exact path="/rooms/:id" component={RoomDetails} />
               <Route exact path="/rooms/bookmarks" component={Bookmarks} />
             </RoomProvider>
-            <Route exact path="/bookings" component={BookingList} />
+            <BookingProvider>
+              <Route exact path="/bookings" component={BookingList} />
+            </BookingProvider>
           </SearchProvider>
 
           <Route exact path="/login/otp/:roleId" component={LoginOtp} />

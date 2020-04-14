@@ -22,13 +22,13 @@ export default ({ open, setOpen }) => {
     }
 
     const checkInDate = convertToMMDDYYYY(datesRange.slice(0, 10));
-    const checkOutDate = convertToMMDDYYYY(datesRange.slice(13));
+    const endDate = convertToMMDDYYYY(datesRange.slice(13));
 
     const data = {
       location,
       guests,
       checkInDate,
-      checkOutDate,
+      endDate,
       datesRange,
     };
 

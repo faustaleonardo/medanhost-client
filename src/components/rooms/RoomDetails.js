@@ -17,18 +17,24 @@ import { useParams, useHistory } from 'react-router-dom';
 import axiosInstance from 'utils/axiosInstance';
 import { SearchContext } from 'context/searches/searchState';
 import { DatesRangeInput } from 'semantic-ui-calendar-react';
+import formatCurrency from 'utils/formatCurrency';
+import getDiffDays from 'utils/getDiffDays';
+import addDaysAndFormat from 'utils/addDaysAndFormat';
 
 export default () => {
   const { id } = useParams();
   const history = useHistory();
 
-  const { search, setSearch } = useContext(SearchContext);
+  const { search } = useContext(SearchContext);
 
   const [room, setRoom] = useState(null);
   const [position, setPosition] = useState('');
   const [guests, setGuests] = useState();
   const [datesRange, setDatesRange] = useState();
+  const [diffDays, setDiffDays] = useState(0);
+  const [price, setPrice] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [loadingConfirm, setLoadingConfirm] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,6 +58,9 @@ export default () => {
       // set form fields
       setGuests(search.guests);
       setDatesRange(search.datesRange);
+      const diff = getDiffDays(search.checkInDate, search.endDate);
+      setDiffDays(diff);
+      setPrice(diff * data.price);
       setLoading(false);
     };
     if (search) fetchData();
@@ -64,7 +73,27 @@ export default () => {
     });
   };
 
-  if (!room || !position) return null;
+  const handleConfirm = async () => {
+    const data = {
+      roomId: id * 1,
+      checkInDate: addDaysAndFormat(search.checkInDate, 0),
+      checkOutDate: addDaysAndFormat(search.endDate, 1),
+      guests: search.guests * 1,
+      price,
+    };
+    console.log(data);
+
+    try {
+      setLoadingConfirm(true);
+      await axiosInstance.post('/api/v1/bookings', data);
+      setLoadingConfirm(false);
+      history.push('/bookings');
+    } catch (err) {
+      setLoadingConfirm(false);
+    }
+  };
+
+  if (!room || !position || !search || !datesRange) return null;
 
   return (
     <div>
@@ -98,14 +127,13 @@ export default () => {
                 </Grid.Column>
               </Grid.Row>
             </Grid>
-
             <div className="mt-1r">
               <Carousel showIndicators={true}>{renderPictures()}</Carousel>
 
               <div className="border-bottom"></div>
               <p className="mt-2r">
-                {room.guests} guests · {room.type.value} · {room.bedrooms}·{' '}
-                {room.beds} beds · {room.baths} baths
+                {room.guests} guests · {room.type.value} · {room.bedrooms}{' '}
+                bedrooms · {room.beds} beds · {room.baths} baths
               </p>
               <p className="mt-1r">{room.description}</p>
 
@@ -160,11 +188,15 @@ export default () => {
 
           <Grid.Column width={5}>
             <div className="border-form mt-8r">
-              <Button fluid>Search again</Button>
-              <Divider horizontal>Or</Divider>
-              <h1>Book now</h1>
+              <h3>Hmm... Not quite what I expected</h3>
+              <Button fluid={true} onClick={() => history.push('/rooms')}>
+                Search again
+              </Button>
 
-              <Form fluid>
+              <Divider horizontal>Or</Divider>
+
+              <h1>Book now</h1>
+              <Form>
                 <Form.Field>
                   <label>Booking</label>
                   <DatesRangeInput
@@ -175,7 +207,8 @@ export default () => {
                     popupPosition="bottom left"
                     animation="none"
                     minDate={new Date()}
-                    disable={true}
+                    onChange={() => {}}
+                    disable="true"
                   />
                 </Form.Field>
                 <Form.Field>
@@ -188,14 +221,24 @@ export default () => {
                 </Form.Field>
                 <Grid>
                   <Grid.Row columns={2}>
-                    <Grid.Column>Rp 300.000 x 5 nights</Grid.Column>
                     <Grid.Column>
-                      <div className="text-right bold">Rp 1.500.000</div>
+                      {formatCurrency(room.price)} x {diffDays} nights
+                    </Grid.Column>
+                    <Grid.Column>
+                      <div className="text-right bold">
+                        {formatCurrency(price)}
+                      </div>
                     </Grid.Column>
                   </Grid.Row>
                 </Grid>
                 <div className="border-bottom mt-1r mb-1r"></div>
-                <Form.Field control={Button} positive fluid>
+                <Form.Field
+                  control={Button}
+                  positive
+                  fluid={true}
+                  onClick={handleConfirm}
+                  loading={loadingConfirm}
+                >
                   Confirm
                 </Form.Field>
               </Form>

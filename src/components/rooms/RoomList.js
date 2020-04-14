@@ -166,8 +166,7 @@ export default () => {
         <h1>Stays in {search.location}</h1>
         <p>
           {rooms.length} stays · {moment(search.checkInDate).format('MMMM Do')}{' '}
-          - {moment(search.checkOutDate).format('MMMM Do')} · {search.guests}{' '}
-          guests
+          - {moment(search.endDate).format('MMMM Do')} · {search.guests} guests
         </p>
       </div>
 
