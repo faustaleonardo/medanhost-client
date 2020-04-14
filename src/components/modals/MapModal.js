@@ -13,7 +13,7 @@ export default ({ open, setOpen, position }) => {
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           />
           <Marker position={position}>
-            <Popup>This is my place!</Popup>
+            <Popup>This is the place!</Popup>
           </Marker>
         </Map>
       </Modal.Content>

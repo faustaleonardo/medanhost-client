@@ -18,6 +18,10 @@ export default () => {
   const { setSearch, search } = useContext(SearchContext);
   const { rooms, setRooms } = useContext(RoomContext);
   const [position, setPosition] = useState([]);
+  const [type, setType] = useState('');
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
+
   const [openMapModal, setOpenMapModal] = useState(false);
 
   const [openTypeOfPlace, setOpenTypeOfPlace] = useState(false);
@@ -26,7 +30,7 @@ export default () => {
 
   useEffect(() => {
     const fetchRooms = async () => {
-      const queryString = `location=${search.location}&guests=${search.guests}&checkInDate=${search.checkInDate}&minPrice=${search.minPrice}&maxPrice=${search.maxPrice}&type=${search.type}`;
+      const queryString = `location=${search.location}&guests=${search.guests}&checkInDate=${search.checkInDate}&minPrice=${minPrice}&maxPrice=${maxPrice}&type=${type}`;
 
       const response = await axiosInstance.get(`/api/v1/rooms?${queryString}`);
       const data = response.data;
@@ -38,7 +42,7 @@ export default () => {
     };
 
     if (search) fetchRooms();
-  }, [search]);
+  }, [search, type, minPrice, maxPrice]);
 
   const handleShowLocation = async (location) => {
     const response = await opencage.geocode({
@@ -51,6 +55,11 @@ export default () => {
 
     setPosition([lat, lng]);
     setOpenMapModal(true);
+  };
+
+  const updateTypeToSearch = (typesArr) => {
+    if (typesArr.length) setType(typesArr.toString());
+    setOpenTypeOfPlace(false);
   };
 
   if (!search) return <Redirect to="/" />;
@@ -87,7 +96,7 @@ export default () => {
                 <span>{room.type.value}</span>
               </Card.Meta>
               <Card.Description>
-                <div>{room.guests} guests</div>
+                <div>Max. {room.guests} guests</div>
                 <h4 className="mt-05r">{formatCurrency(room.price)} / night</h4>
                 <div className="mb-05r">{room.location}</div>
                 <Button
@@ -108,7 +117,11 @@ export default () => {
 
   return (
     <div>
-      <TypeOfPlaceModal open={openTypeOfPlace} setOpen={setOpenTypeOfPlace} />
+      <TypeOfPlaceModal
+        open={openTypeOfPlace}
+        setOpen={setOpenTypeOfPlace}
+        action={updateTypeToSearch}
+      />
       <PriceModal open={openPrice} setOpen={setOpenPrice} />
       <SearchDetailsModal
         open={openSearchDetails}

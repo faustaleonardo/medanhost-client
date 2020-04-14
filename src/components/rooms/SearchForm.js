@@ -31,9 +31,6 @@ export default () => {
       guests,
       checkInDate,
       checkOutDate,
-      minPrice: '',
-      maxPrice: '',
-      type: '',
     };
 
     setSearch(data);
