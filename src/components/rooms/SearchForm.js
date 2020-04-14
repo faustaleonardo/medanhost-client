@@ -3,6 +3,7 @@ import { Form, Button, Message } from 'semantic-ui-react';
 import { DatesRangeInput } from 'semantic-ui-calendar-react';
 import { SearchContext } from 'context/searches/searchState';
 import { useHistory } from 'react-router-dom';
+import convertToMMDDYYYY from 'utils/convertToMMDDYYYY';
 
 export default () => {
   const { setSearch } = useContext(SearchContext);
@@ -12,11 +13,6 @@ export default () => {
   const [guests, setGuests] = useState(0);
   const [error, setError] = useState('');
   const history = useHistory();
-
-  const convertToMMDDYYYY = (date) => {
-    const d = date.split('-');
-    return `${d[1]}-${d[0]}-${d[2]}`;
-  };
 
   const handleSubmit = () => {
     if (!location || !datesRange || !guests) {
@@ -31,6 +27,7 @@ export default () => {
       guests,
       checkInDate,
       checkOutDate,
+      datesRange,
     };
 
     setSearch(data);

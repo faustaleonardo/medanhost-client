@@ -8,11 +8,11 @@ export default ({ open, setOpen, action }) => {
 
   const handleSave = () => {
     if (minPrice < 1 || maxPrice < 1) {
-      return setError('Min Price and Max Price must be greater than 0');
+      return setError('Min price and Max price must be greater than 0');
     }
 
     if (maxPrice * 1 < minPrice * 1) {
-      return setError('Max Price must be greater than Min Price');
+      return setError('Max price must be greater than Min price');
     }
 
     action(minPrice, maxPrice);

@@ -1,6 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext } from 'react';
-import { Grid, Card, Button, Icon, Image } from 'semantic-ui-react';
+import {
+  Grid,
+  Card,
+  Button,
+  Icon,
+  Image,
+  Dimmer,
+  Loader,
+} from 'semantic-ui-react';
 import { Link, Redirect } from 'react-router-dom';
 import axiosInstance from 'utils/axiosInstance';
 import moment from 'moment';
@@ -15,12 +23,13 @@ import SearchDetailsModal from './modals/SearchDetailsModal';
 import MapModal from 'components/modals/MapModal';
 
 export default () => {
-  const { setSearch, search } = useContext(SearchContext);
+  const { search } = useContext(SearchContext);
   const { rooms, setRooms } = useContext(RoomContext);
   const [position, setPosition] = useState([]);
   const [type, setType] = useState('');
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const [openMapModal, setOpenMapModal] = useState(false);
 
@@ -34,17 +43,21 @@ export default () => {
         (minPrice === '' && maxPrice === '') ||
         (maxPrice.length && minPrice.length)
       ) {
-        const queryString = `location=${search.location}&guests=${search.guests}&checkInDate=${search.checkInDate}&minPrice=${minPrice}&maxPrice=${maxPrice}&type=${type}`;
+        try {
+          setLoading(true);
+          const queryString = `location=${search.location}&guests=${search.guests}&checkInDate=${search.checkInDate}&minPrice=${minPrice}&maxPrice=${maxPrice}&type=${type}`;
+          const response = await axiosInstance.get(
+            `/api/v1/rooms?${queryString}`
+          );
+          const data = response.data;
 
-        const response = await axiosInstance.get(
-          `/api/v1/rooms?${queryString}`
-        );
-        const data = response.data;
-
-        // show only rooms available
-        const result = data.filter((el) => el.bookings.length === 0);
-
-        setRooms(result);
+          // show only rooms available
+          const result = data.filter((el) => el.bookings.length === 0);
+          setRooms(result);
+        } catch (err) {
+          console.log(err);
+        }
+        setLoading(false);
       }
     };
 
@@ -169,6 +182,10 @@ export default () => {
           Search Details
         </Button>
       </div>
+
+      <Dimmer active={loading}>
+        <Loader>Loading</Loader>
+      </Dimmer>
 
       <Grid columns={3}>
         <Grid.Row>{renderContent()}</Grid.Row>
