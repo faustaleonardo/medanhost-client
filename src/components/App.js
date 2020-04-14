@@ -58,7 +58,7 @@ export default () => {
             <RoomProvider>
               <Route exact path="/" component={SearchForm} />
               <Route exact path="/rooms" component={RoomList} />
-              <Route exact path="/rooms/1" component={RoomDetails} />
+              <Route exact path="/rooms/:id" component={RoomDetails} />
               <Route exact path="/rooms/bookmarks" component={Bookmarks} />
             </RoomProvider>
             <Route exact path="/bookings" component={BookingList} />

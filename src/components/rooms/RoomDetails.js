@@ -1,19 +1,82 @@
-import React from 'react';
-import { Grid, Icon, Button, Card, Form } from 'semantic-ui-react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState, useContext } from 'react';
+import {
+  Grid,
+  Icon,
+  Button,
+  Card,
+  Form,
+  Dimmer,
+  Loader,
+  Divider,
+} from 'semantic-ui-react';
 import { Carousel } from 'react-responsive-carousel';
-import Pagination from 'components/partials/Pagination';
-import MapContainer from 'components/partials/MapContainer';
+import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
+import * as opencage from 'opencage-api-client';
+import { useParams, useHistory } from 'react-router-dom';
+import axiosInstance from 'utils/axiosInstance';
+import { SearchContext } from 'context/searches/searchState';
+import { DatesRangeInput } from 'semantic-ui-calendar-react';
 
 export default () => {
+  const { id } = useParams();
+  const history = useHistory();
+
+  const { search, setSearch } = useContext(SearchContext);
+
+  const [room, setRoom] = useState(null);
+  const [position, setPosition] = useState('');
+  const [guests, setGuests] = useState();
+  const [datesRange, setDatesRange] = useState();
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      // fetch room data
+      let response = await axiosInstance.get(`/api/v1/rooms/${id}`);
+      const data = response.data;
+      setRoom(data);
+
+      // fetch lat, lng
+      response = await opencage.geocode({
+        key: process.env.REACT_APP_OPENCAGE_API_KEY,
+        q: data.location,
+      });
+      const { geometry } = response.results[0];
+      const lat = geometry.lat;
+      const lng = geometry.lng;
+
+      setPosition([lat, lng]);
+
+      // set form fields
+      setGuests(search.guests);
+      setDatesRange(search.datesRange);
+      setLoading(false);
+    };
+    if (search) fetchData();
+    else history.push('/');
+  }, []);
+
+  const renderPictures = () => {
+    return room.pictures.map((picture) => {
+      return <img key={picture.id} src={picture.path} alt={picture.id} />;
+    });
+  };
+
+  if (!room || !position) return null;
+
   return (
     <div>
+      <Dimmer active={loading}>
+        <Loader>Loading</Loader>
+      </Dimmer>
+
       <Grid>
         <Grid.Row>
           <Grid.Column width={11}>
-            <h1 className="mb-05r">CBD Ayola</h1>
-            <h3 className="mt-05r">
-              Jalan Ustad Abdul Hamid No.32, Tanjungbalai
-            </h3>
+            <h1 className="mb-05r">{room.name}</h1>
+            <h3 className="mt-05r">{room.location}</h3>
 
             <Grid columns={2}>
               <Grid.Row>
@@ -37,35 +100,26 @@ export default () => {
             </Grid>
 
             <div className="mt-1r">
-              <Carousel showIndicators={true}>
-                <img
-                  src="https://a0.muscache.com/im/pictures/a08c1952-7933-47c4-a5f4-82315824b471.jpg?aki_policy=large"
-                  alt="house-1"
-                />
-                <img
-                  src="https://a0.muscache.com/im/pictures/cb43c75f-f3ed-4a80-afdf-51ed9d91f36d.jpg?aki_policy=large"
-                  alt="house-2"
-                />
-              </Carousel>
+              <Carousel showIndicators={true}>{renderPictures()}</Carousel>
 
               <div className="border-bottom"></div>
-              <p className="mt-2r">4 guests · Studio · 3 beds · 1 bath</p>
-              <p className="mt-1r">
-                This 55m2 open plan studio apartment is located on the 4th floor
-                of a heritage listed building in historic Woolloomooloo. Sleep
-                up to 4 persons with 2 x queen beds and 1 sofa bed. This
-                apartment does not contain internal laundry facilities. A coin
-                operated laundry is located on level 1 of the building. Your
-                apartment includes all linen and amenities. A full linen change
-                and apartment clean is provided once per week for a stay of 10
-                days or more. Car parking is available at no charge which must
-                be booked in advance. Cots can be provided free of charge -
-                please advise in advance if required.
+              <p className="mt-2r">
+                {room.guests} guests · {room.type.value} · {room.bedrooms}·{' '}
+                {room.beds} beds · {room.baths} baths
               </p>
+              <p className="mt-1r">{room.description}</p>
 
               <h1>Location</h1>
               <div className="map-container">
-                <MapContainer />
+                <Map center={position} zoom={16}>
+                  <TileLayer
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                  />
+                  <Marker position={position}>
+                    <Popup>This is the place!</Popup>
+                  </Marker>
+                </Map>
               </div>
 
               <div className="border-bottom mt-2r mb-2r"></div>
@@ -100,21 +154,37 @@ export default () => {
                     </Grid.Column>
                   </Grid.Row>
                 </Grid>
-                <Pagination />
               </div>
             </div>
           </Grid.Column>
 
           <Grid.Column width={5}>
             <div className="border-form mt-8r">
-              <h1>Book your room now</h1>
+              <Button fluid>Search again</Button>
+              <Divider horizontal>Or</Divider>
+              <h1>Book now</h1>
+
               <Form fluid>
-                <Form.Group widths="equal">
-                  <Form.Input fluid label="Check in" placeholder="Check in" />
-                  <Form.Input fluid label="Check out" placeholder="Check out" />
-                </Form.Group>
                 <Form.Field>
-                  <Form.Input label="Guests" placeholder="Guests" />
+                  <label>Booking</label>
+                  <DatesRangeInput
+                    name="datesRange"
+                    placeholder="From - To"
+                    value={datesRange}
+                    iconPosition="left"
+                    popupPosition="bottom left"
+                    animation="none"
+                    minDate={new Date()}
+                    disable={true}
+                  />
+                </Form.Field>
+                <Form.Field>
+                  <Form.Input
+                    label="Guests"
+                    placeholder="Guests"
+                    value={guests}
+                    readOnly
+                  />
                 </Form.Field>
                 <Grid>
                   <Grid.Row columns={2}>
