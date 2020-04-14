@@ -53,6 +53,7 @@ export default () => {
 
   const logout = () => {
     localStorage.removeItem('jwt');
+    history.push('/');
     setAuth(false);
   };
 

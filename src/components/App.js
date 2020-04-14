@@ -4,6 +4,7 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import { Container } from 'semantic-ui-react';
 import { AuthContext } from 'context/auth/authState';
 import { RoomProvider } from 'context/rooms/roomState';
+import { UserProvider } from 'context/users/userState';
 import axiosInstance from 'utils/axiosInstance';
 
 import Navigation from 'components/partials/Navigation';
@@ -23,6 +24,7 @@ import UpcomingBookings from 'components/host/UpcomingBookings';
 import Revenue from 'components/host/Revenue';
 
 // admin
+import Login from 'components/auth/admin/Login';
 import ManageUserList from 'components/admin/ManageUserList';
 import ManageRoomList from 'components/admin/ManageRoomList';
 import ManageBookingList from 'components/admin/ManageBookingList';
@@ -90,8 +92,21 @@ export default () => {
           </RoomProvider>
 
           {/* admin */}
-          <Route exact path="/admin/users/manage" component={ManageUserList} />
-          <Route exact path="/admin/rooms/manage" component={ManageRoomList} />
+          <Route exact path="/admin/login" component={Login} />
+          <UserProvider>
+            <Route
+              exact
+              path="/admin/users/manage"
+              component={ManageUserList}
+            />
+          </UserProvider>
+          <RoomProvider>
+            <Route
+              exact
+              path="/admin/rooms/manage"
+              component={ManageRoomList}
+            />
+          </RoomProvider>
           <Route
             exact
             path="/admin/bookings/manage"

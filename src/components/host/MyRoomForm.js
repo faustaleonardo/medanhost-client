@@ -239,8 +239,13 @@ export default ({ title, buttonName }) => {
           </Form.Field>
           <Form.Field>
             <label>Pictures</label>
-            <Card.Group itemsPerRow={3}>{renderPictures()}</Card.Group>
-            <p>{images.length} files</p>
+            {pictures.length ? (
+              <Card.Group itemsPerRow={3} className="mb-05r">
+                {renderPictures()}
+              </Card.Group>
+            ) : (
+              ''
+            )}
             <Button
               content="Choose File"
               labelPosition="left"
@@ -254,6 +259,7 @@ export default ({ title, buttonName }) => {
               hidden
               onChange={(event) => setImages(event.target.files)}
             />
+            <p className="mt-05r">{images.length} files</p>
           </Form.Field>
           <Form.Group widths="equal">
             <Form.Input

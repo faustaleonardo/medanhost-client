@@ -1,16 +1,72 @@
-import React, { useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect, useContext } from 'react';
 import { Table, Button } from 'semantic-ui-react';
-import Pagination from 'components/partials/Pagination';
 import WarningModal from 'components/partials/WarningModal';
+import axiosInstance from 'utils/axiosInstance';
+import { UserContext } from 'context/users/userState';
 
 export default () => {
   const [openWarningModal, setOpenWarningModal] = useState(false);
+  const [userId, setUserId] = useState(null);
+  const { users, setUsers, deleteUser } = useContext(UserContext);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const response = await axiosInstance.get('/api/v1/users');
+      const data = response.data;
+
+      setUsers(data);
+    };
+
+    fetchUsers();
+  }, []);
+
+  const handleDeleteModal = (userId) => {
+    setUserId(userId);
+    setOpenWarningModal(true);
+  };
+
+  const handleDeleteUser = async (userId) => {
+    try {
+      // delete room
+      await axiosInstance.delete(`/api/v1/users/${userId}`);
+
+      deleteUser(userId);
+      setOpenWarningModal(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const renderContent = () => {
+    return users.map((user) => {
+      return (
+        <Table.Row key={user.id}>
+          <Table.Cell>{user.id}</Table.Cell>
+          <Table.Cell>{user.googleId}</Table.Cell>
+          <Table.Cell>{user.email}</Table.Cell>
+          <Table.Cell>{user.firstName}</Table.Cell>
+          <Table.Cell>{user.lastName}</Table.Cell>
+          <Table.Cell>{user.role.value}</Table.Cell>
+          <Table.Cell>
+            <Button negative onClick={() => handleDeleteModal(user.id)}>
+              Delete
+            </Button>
+          </Table.Cell>
+        </Table.Row>
+      );
+    });
+  };
+
+  if (!users.length) return null;
 
   return (
     <div>
       <WarningModal
         open={openWarningModal}
         setOpen={setOpenWarningModal}
+        id={userId}
+        action={handleDeleteUser}
         title={'Delete User'}
       />
 
@@ -29,30 +85,9 @@ export default () => {
             </Table.Row>
           </Table.Header>
 
-          <Table.Body>
-            <Table.Row>
-              <Table.Cell>1</Table.Cell>
-              <Table.Cell>1120192300129</Table.Cell>
-              <Table.Cell>johndoe@gmail.com</Table.Cell>
-              <Table.Cell>John</Table.Cell>
-              <Table.Cell>Doe</Table.Cell>
-              <Table.Cell>Guest</Table.Cell>
-              <Table.Cell>
-                <Button
-                  negative
-                  onClick={() => {
-                    setOpenWarningModal(true);
-                  }}
-                >
-                  Delete
-                </Button>
-              </Table.Cell>
-            </Table.Row>
-          </Table.Body>
+          <Table.Body>{renderContent()}</Table.Body>
         </Table>
       </div>
-
-      <Pagination />
     </div>
   );
 };
