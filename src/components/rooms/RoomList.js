@@ -47,7 +47,7 @@ export default () => {
           setLoading(true);
           const queryString = `location=${search.location}&guests=${search.guests}&checkInDate=${search.checkInDate}&minPrice=${minPrice}&maxPrice=${maxPrice}&type=${type}`;
           const response = await axiosInstance.get(
-            `/api/v1/rooms?${queryString}`
+            `/api/v1/rooms/search?${queryString}`
           );
           const data = response.data;
 
@@ -105,14 +105,6 @@ export default () => {
                     <Grid.Row>
                       <Grid.Column>
                         <span>{room.name}</span>
-                      </Grid.Column>
-                      <Grid.Column>
-                        <div className="ratings-text">
-                          <Icon name="star" color="red" />
-                          <span>
-                            4.7 <span className="gray">(30)</span>
-                          </span>
-                        </div>
                       </Grid.Column>
                     </Grid.Row>
                   </Grid>

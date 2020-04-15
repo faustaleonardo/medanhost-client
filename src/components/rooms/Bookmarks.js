@@ -1,230 +1,123 @@
-import React, { useState } from 'react';
-import { Grid, Card, Icon, Button, Image } from 'semantic-ui-react';
-import { Link, useHistory } from 'react-router-dom';
-import MapContainerModal from './modals/MapContainerModal';
+import React, { useState, useContext } from 'react';
+import * as opencage from 'opencage-api-client';
+
+import { Table, Icon, Button } from 'semantic-ui-react';
 import WarningModal from 'components/partials/WarningModal';
-import Pagination from 'components/partials/Pagination';
+import MapModal from 'components/modals/MapModal';
+import { BookmarkContext } from 'context/bookmarks/bookmarkState';
+import formatCurrency from 'utils/formatCurrency';
+import axiosInstance from 'utils/axiosInstance';
 
 export default () => {
-  const [openMapContainer, setOpenMapContainer] = useState(false);
+  const { bookmarks, deleteBookmark } = useContext(BookmarkContext);
+
   const [openWarningModal, setOpenWarningModal] = useState(false);
-  const history = useHistory();
+  const [openMapModal, setOpenMapModal] = useState(false);
+  const [position, setPosition] = useState([]);
+  const [roomId, setRoomId] = useState(null);
+
+  const handleShowLocation = async (location) => {
+    const response = await opencage.geocode({
+      key: process.env.REACT_APP_OPENCAGE_API_KEY,
+      q: location,
+    });
+    const { geometry } = response.results[0];
+    const lat = geometry.lat;
+    const lng = geometry.lng;
+
+    setPosition([lat, lng]);
+    setOpenMapModal(true);
+  };
+
+  const handleDeleteBookmark = async (id) => {
+    try {
+      await axiosInstance.delete(`/api/v1/users/bookmarks/rooms/${id}`);
+      deleteBookmark(id);
+    } catch (err) {
+      console.log(err.response);
+    }
+    setOpenWarningModal(false);
+  };
+
+  const handleDeleteBookmarkModal = (id) => {
+    setRoomId(id);
+    setOpenWarningModal(true);
+  };
+
+  const renderContent = () => {
+    return bookmarks.map((room) => {
+      return (
+        <Table.Row key={room.id}>
+          <Table.Cell>{room.name}</Table.Cell>
+          <Table.Cell>
+            {room.location} <br />
+            <div className="mt-05r">
+              <Button
+                icon
+                labelPosition="left"
+                onClick={() => {
+                  handleShowLocation(room.location);
+                }}
+              >
+                <Icon name="map marker alternate" />
+                Show Location
+              </Button>
+            </div>
+          </Table.Cell>
+          <Table.Cell>
+            {room.bedrooms}Bedrooms <br />
+            {room.beds} Beds <br />
+            {room.baths} Baths <br />
+          </Table.Cell>
+          <Table.Cell>{formatCurrency(room.price)}</Table.Cell>
+          <Table.Cell>
+            <Button negative onClick={() => handleDeleteBookmarkModal(room.id)}>
+              Delete
+            </Button>
+          </Table.Cell>
+        </Table.Row>
+      );
+    });
+  };
+
+  if (!bookmarks) return null;
 
   return (
     <div>
-      <MapContainerModal
-        open={openMapContainer}
-        setOpen={setOpenMapContainer}
+      <MapModal
+        open={openMapModal}
+        setOpen={setOpenMapModal}
+        position={position}
       />
-
       <WarningModal
         open={openWarningModal}
         setOpen={setOpenWarningModal}
-        title={'Remove From Bookmarks'}
+        id={roomId}
+        action={handleDeleteBookmark}
+        title={'Delete From Bookmarks'}
       />
 
       <h1>Your Bookmarks</h1>
 
-      <Grid columns={3}>
-        <Grid.Row>
-          <Grid.Column>
-            <Card>
-              <Link to="/rooms/1">
-                <Image src="https://a0.muscache.com/im/pictures/a08c1952-7933-47c4-a5f4-82315824b471.jpg?aki_policy=large" />
-              </Link>
-              <div className="border-bottom"></div>
-              <Card.Content>
-                <Card.Header>
-                  <div>
-                    <Grid columns={2}>
-                      <Grid.Row>
-                        <Grid.Column>
-                          <span>CBD Ayola</span>
-                        </Grid.Column>
-                        <Grid.Column>
-                          <div className="ratings-text">
-                            <Icon name="star" color="red" />
-                            <span>
-                              4.7 <span className="gray">(30)</span>
-                            </span>
-                          </div>
-                        </Grid.Column>
-                      </Grid.Row>
-                    </Grid>
-                  </div>
-                </Card.Header>
-                <Card.Meta>
-                  <span>Shared Room</span>
-                </Card.Meta>
-                <Card.Description>
-                  <div className="mb-05r">4 guests</div>
-                  <div className="mb-05r">
-                    Jalan Ustad Abdul Hamid No.32, Tanjungbalai
-                  </div>
-                  <Button
-                    icon
-                    labelPosition="left"
-                    onClick={() => setOpenMapContainer(true)}
-                  >
-                    <Icon name="map marker alternate" />
-                    Show Location
-                  </Button>
-                </Card.Description>
-              </Card.Content>
-              <Card.Content extra>
-                <div className="ui two buttons">
-                  <Button
-                    basic
-                    color="green"
-                    onClick={() => history.push('/rooms/1')}
-                  >
-                    Visit
-                  </Button>
-                  <Button
-                    basic
-                    color="red"
-                    onClick={() => setOpenWarningModal(true)}
-                  >
-                    Remove
-                  </Button>
-                </div>
-              </Card.Content>
-            </Card>
-          </Grid.Column>
+      {bookmarks ? (
+        <div>
+          <Table striped>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>Name</Table.HeaderCell>
+                <Table.HeaderCell>Location</Table.HeaderCell>
+                <Table.HeaderCell>Brief Description</Table.HeaderCell>
+                <Table.HeaderCell>Price / Night</Table.HeaderCell>
+                <Table.HeaderCell>Action</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
 
-          <Grid.Column>
-            <Card>
-              <Link to="/rooms/1">
-                <Image src="https://a0.muscache.com/im/pictures/a08c1952-7933-47c4-a5f4-82315824b471.jpg?aki_policy=large" />
-              </Link>
-              <div className="border-bottom"></div>
-              <Card.Content>
-                <Card.Header>
-                  <div>
-                    <Grid columns={2}>
-                      <Grid.Row>
-                        <Grid.Column>
-                          <span>CBD Ayola</span>
-                        </Grid.Column>
-                        <Grid.Column>
-                          <div className="ratings-text">
-                            <Icon name="star" color="red" />
-                            <span>
-                              4.7 <span className="gray">(30)</span>
-                            </span>
-                          </div>
-                        </Grid.Column>
-                      </Grid.Row>
-                    </Grid>
-                  </div>
-                </Card.Header>
-                <Card.Meta>
-                  <span>Shared Room</span>
-                </Card.Meta>
-                <Card.Description>
-                  <div className="mb-05r">4 guests</div>
-                  <div className="mb-05r">
-                    Jalan Ustad Abdul Hamid No.32, Tanjungbalai
-                  </div>
-                  <Button
-                    icon
-                    labelPosition="left"
-                    onClick={() => setOpenMapContainer(true)}
-                  >
-                    <Icon name="map marker alternate" />
-                    Show Location
-                  </Button>
-                </Card.Description>
-              </Card.Content>
-              <Card.Content extra>
-                <div className="ui two buttons">
-                  <Button
-                    basic
-                    color="green"
-                    onClick={() => history.push('/rooms/1')}
-                  >
-                    Visit
-                  </Button>
-                  <Button
-                    basic
-                    color="red"
-                    onClick={() => setOpenWarningModal(true)}
-                  >
-                    Remove
-                  </Button>
-                </div>
-              </Card.Content>
-            </Card>
-          </Grid.Column>
-
-          <Grid.Column>
-            <Card>
-              <Link to="/rooms/1">
-                <Image src="https://a0.muscache.com/im/pictures/a08c1952-7933-47c4-a5f4-82315824b471.jpg?aki_policy=large" />
-              </Link>
-              <div className="border-bottom"></div>
-              <Card.Content>
-                <Card.Header>
-                  <div>
-                    <Grid columns={2}>
-                      <Grid.Row>
-                        <Grid.Column>
-                          <span>CBD Ayola</span>
-                        </Grid.Column>
-                        <Grid.Column>
-                          <div className="ratings-text">
-                            <Icon name="star" color="red" />
-                            <span>
-                              4.7 <span className="gray">(30)</span>
-                            </span>
-                          </div>
-                        </Grid.Column>
-                      </Grid.Row>
-                    </Grid>
-                  </div>
-                </Card.Header>
-                <Card.Meta>
-                  <span>Shared Room</span>
-                </Card.Meta>
-                <Card.Description>
-                  <div className="mb-05r">4 guests</div>
-                  <div className="mb-05r">
-                    Jalan Ustad Abdul Hamid No.32, Tanjungbalai
-                  </div>
-                  <Button
-                    icon
-                    labelPosition="left"
-                    onClick={() => setOpenMapContainer(true)}
-                  >
-                    <Icon name="map marker alternate" />
-                    Show Location
-                  </Button>
-                </Card.Description>
-              </Card.Content>
-              <Card.Content extra>
-                <div className="ui two buttons">
-                  <Button
-                    basic
-                    color="green"
-                    onClick={() => history.push('/rooms/1')}
-                  >
-                    Visit
-                  </Button>
-                  <Button
-                    basic
-                    color="red"
-                    onClick={() => setOpenWarningModal(true)}
-                  >
-                    Remove
-                  </Button>
-                </div>
-              </Card.Content>
-            </Card>
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
-
-      <Pagination />
+            <Table.Body>{renderContent()}</Table.Body>
+          </Table>
+        </div>
+      ) : (
+        ''
+      )}
     </div>
   );
 };

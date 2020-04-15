@@ -20,7 +20,7 @@ export default () => {
         history.push('/reviews');
         break;
       case 'bookmarks':
-        history.push('/rooms/bookmarks');
+        history.push('/bookmarks');
         break;
       case 'my rooms':
         history.push('/host/rooms');

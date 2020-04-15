@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext } from 'react';
 import { Table, Button, Icon } from 'semantic-ui-react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import axiosInstance from 'utils/axiosInstance';
 import * as opencage from 'opencage-api-client';
 
@@ -66,9 +66,7 @@ export default () => {
     return rooms.map((room) => {
       return (
         <Table.Row key={room.id}>
-          <Table.Cell>
-            <Link to={'rooms/' + room.id}>{room.name}</Link>
-          </Table.Cell>
+          <Table.Cell>{room.name}</Table.Cell>
           <Table.Cell>{room.type.value}</Table.Cell>
           <Table.Cell>
             {room.location} <br />

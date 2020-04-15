@@ -16,18 +16,26 @@ import * as opencage from 'opencage-api-client';
 import { useParams, useHistory } from 'react-router-dom';
 import axiosInstance from 'utils/axiosInstance';
 import { SearchContext } from 'context/searches/searchState';
+import { BookmarkContext } from 'context/bookmarks/bookmarkState';
+
 import { DatesRangeInput } from 'semantic-ui-calendar-react';
 import formatCurrency from 'utils/formatCurrency';
 import getDiffDays from 'utils/getDiffDays';
 import addDaysAndFormat from 'utils/addDaysAndFormat';
+import moment from 'moment';
 
 export default () => {
   const { id } = useParams();
   const history = useHistory();
 
   const { search } = useContext(SearchContext);
+  const { bookmarks, addBookmark, deleteBookmark } = useContext(
+    BookmarkContext
+  );
 
   const [room, setRoom] = useState(null);
+  const [totalReviews, setTotalReviews] = useState(null);
+  const [avgRatings, setAvgRatings] = useState(null);
   const [position, setPosition] = useState('');
   const [guests, setGuests] = useState();
   const [datesRange, setDatesRange] = useState();
@@ -62,6 +70,14 @@ export default () => {
       setDiffDays(diff);
       setPrice(diff * data.price);
       setLoading(false);
+
+      // set total reviews and average ratings
+      setTotalReviews(data.reviews.length);
+      let count = 0;
+      for (const review of data.reviews) {
+        count += review.ratings;
+      }
+      setAvgRatings((count / data.reviews.length).toFixed(1));
     };
     if (search) fetchData();
     else history.push('/');
@@ -92,6 +108,72 @@ export default () => {
     }
   };
 
+  const renderReviews = () => {
+    if (room.reviews) {
+      return room.reviews.map((review) => {
+        return (
+          <Grid.Column key={review.id}>
+            <Card>
+              <Card.Content>
+                <Card.Header>{review.username}</Card.Header>
+                <Card.Meta>
+                  {moment(review.updatedAt, 'YYYYMMDD').fromNow()}
+                </Card.Meta>
+                <Card.Description>{review.comments}</Card.Description>
+              </Card.Content>
+            </Card>
+          </Grid.Column>
+        );
+      });
+    } else return null;
+  };
+
+  const handleAddBookmark = async (room) => {
+    await axiosInstance.post('api/v1/users/bookmarks', {
+      roomId: room.id * 1,
+    });
+    addBookmark(room);
+  };
+
+  const handleDeleteBookmark = async (roomId) => {
+    await axiosInstance.delete(`api/v1/users/bookmarks/rooms/${roomId}`);
+    deleteBookmark(id * 1);
+  };
+
+  const renderBookmarkButton = () => {
+    const bookmark = bookmarks.find((room) => room.id === parseInt(id));
+    if (bookmark) {
+      // render delete
+      return (
+        <Button
+          basic
+          color="red"
+          id="button-bookmark"
+          onClick={() => {
+            handleDeleteBookmark(id);
+          }}
+        >
+          <Icon name="heart" />
+          Bookmarked
+        </Button>
+      );
+    } else {
+      // render add
+      return (
+        <Button
+          basic
+          id="button-bookmark"
+          onClick={() => {
+            handleAddBookmark(room);
+          }}
+        >
+          <Icon name="heart" />
+          Bookmark
+        </Button>
+      );
+    }
+  };
+
   if (!room || !position || !search || !datesRange) return null;
 
   return (
@@ -110,19 +192,21 @@ export default () => {
               <Grid.Row>
                 <Grid.Column>
                   <div>
-                    <Icon name="star" color="red" />
                     <span>
-                      4.7 <span className="gray">(30)</span>
+                      {totalReviews ? (
+                        <span>
+                          <Icon name="star" color="red" />
+                          <span>{avgRatings}</span>
+                          <span className="gray"> ({totalReviews})</span>
+                        </span>
+                      ) : (
+                        ''
+                      )}
                     </span>
                   </div>
                 </Grid.Column>
                 <Grid.Column>
-                  <div className="text-right">
-                    <Button basic id="button-bookmark">
-                      <Icon name="heart" />
-                      Save
-                    </Button>
-                  </div>
+                  <div className="text-right">{renderBookmarkButton()}</div>
                 </Grid.Column>
               </Grid.Row>
             </Grid>
@@ -152,34 +236,19 @@ export default () => {
               <div className="border-bottom mt-2r mb-2r"></div>
               <div className="reviews">
                 <h3>
-                  <Icon name="star" color="red" />
-                  4.87 (15 reviews)
+                  {totalReviews ? (
+                    <span>
+                      <Icon name="star" color="red" />
+                      <span>
+                        {avgRatings} ({totalReviews} reviews)
+                      </span>
+                    </span>
+                  ) : (
+                    ''
+                  )}
                 </h3>
                 <Grid columns={2}>
-                  <Grid.Row>
-                    <Grid.Column>
-                      <Card>
-                        <Card.Content>
-                          <Card.Header>Matthew Harris</Card.Header>
-                          <Card.Meta>3 days ago</Card.Meta>
-                          <Card.Description>
-                            Matthew is a pianist living in Nashville.
-                          </Card.Description>
-                        </Card.Content>
-                      </Card>
-                    </Grid.Column>
-                    <Grid.Column>
-                      <Card>
-                        <Card.Content>
-                          <Card.Header>Matthew Harris</Card.Header>
-                          <Card.Meta>4 days ago</Card.Meta>
-                          <Card.Description>
-                            Matthew is a pianist living in Nashville.
-                          </Card.Description>
-                        </Card.Content>
-                      </Card>
-                    </Grid.Column>
-                  </Grid.Row>
+                  <Grid.Row>{renderReviews()}</Grid.Row>
                 </Grid>
               </div>
             </div>

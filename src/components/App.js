@@ -3,6 +3,7 @@ import React, { useEffect, useContext } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 import { Container } from 'semantic-ui-react';
 import { AuthContext } from 'context/auth/authState';
+import { BookmarkContext } from 'context/bookmarks/bookmarkState';
 import { RoomProvider } from 'context/rooms/roomState';
 import { UserProvider } from 'context/users/userState';
 import { SearchProvider } from 'context/searches/searchState';
@@ -36,6 +37,7 @@ import Transaction from 'components/admin/Transaction';
 
 export default () => {
   const { setAuth } = useContext(AuthContext);
+  const { setBookmarks } = useContext(BookmarkContext);
 
   useEffect(() => {
     const fetchAuth = async () => {
@@ -43,8 +45,10 @@ export default () => {
       if (!jwt) return setAuth(false);
 
       const response = await axiosInstance.get('api/v1/users/auth');
-      if (response.status === 200) setAuth(response.data);
-      else setAuth(false);
+      if (response.status === 200) {
+        setAuth(response.data);
+        setBookmarks(response.data.bookmarks);
+      } else setAuth(false);
     };
     fetchAuth();
   }, []);
