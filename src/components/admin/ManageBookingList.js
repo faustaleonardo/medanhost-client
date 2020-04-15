@@ -1,16 +1,116 @@
-import React, { useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect, useContext } from 'react';
 import { Table, Button } from 'semantic-ui-react';
-import Pagination from 'components/partials/Pagination';
 import WarningModal from 'components/partials/WarningModal';
+import { BookingContext } from 'context/bookings/bookingState';
+
+import axiosInstance from 'utils/axiosInstance';
+import formatCurrency from 'utils/formatCurrency';
+import formatDate from 'utils/formatDate';
 
 export default () => {
+  const { bookings, setBookings, updateBooking } = useContext(BookingContext);
   const [openWarningModal, setOpenWarningModal] = useState(false);
+  const [bookingId, setBookingId] = useState('');
+  const [submitChange, setSubmitChange] = useState(false);
+
+  useEffect(() => {
+    const fetchRooms = async () => {
+      const response = await axiosInstance.get('/api/v1/bookings/all');
+      const data = response.data;
+
+      setBookings(data);
+    };
+
+    fetchRooms();
+  }, [submitChange]);
+
+  const handleCancelModal = (bookingId) => {
+    setBookingId(bookingId);
+    setOpenWarningModal(true);
+  };
+
+  const handleCancelBooking = async (bookingId) => {
+    try {
+      const response = await axiosInstance.patch(
+        `/api/v1/bookings/${bookingId}`,
+        { active: false }
+      );
+      const data = response.data;
+
+      updateBooking(data);
+      setSubmitChange(!submitChange);
+      setOpenWarningModal(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const renderContent = () => {
+    return bookings.map((booking) => {
+      return (
+        <Table.Row key={booking.id}>
+          <Table.Cell>{booking.id}</Table.Cell>
+          <Table.Cell>
+            <div className="text-center">{booking.user.id}</div>
+          </Table.Cell>
+          <Table.Cell>
+            <div className="text-center">{booking.room.id}</div>
+          </Table.Cell>
+          <Table.Cell>{formatDate(booking.checkInDate)}</Table.Cell>
+          <Table.Cell>{formatDate(booking.checkOutDate)}</Table.Cell>
+          <Table.Cell>
+            <div className="text-center">{booking.guests}</div>
+          </Table.Cell>
+          <Table.Cell>
+            <span className="green">{formatCurrency(booking.price)}</span>
+          </Table.Cell>
+          <Table.Cell>
+            {booking.statusPayment === false && booking.active === true ? (
+              <span>Waiting for payment</span>
+            ) : (
+              ''
+            )}
+            {booking.statusPayment === true && booking.active === false ? (
+              <span className="green">Paid</span>
+            ) : (
+              ''
+            )}
+            {booking.statusPayment === false && booking.active === false ? (
+              <span className="red">Cancelled</span>
+            ) : (
+              ''
+            )}
+          </Table.Cell>
+          <Table.Cell>{formatDate(booking.createdAt)}</Table.Cell>
+          <Table.Cell>{formatDate(booking.updatedAt)}</Table.Cell>
+          <Table.Cell>
+            {booking.statusPayment === false && booking.active === true ? (
+              <Button negative onClick={() => handleCancelModal(booking.id)}>
+                Cancel
+              </Button>
+            ) : (
+              ''
+            )}
+            {(booking.statusPayment === false && booking.active === false) ||
+            (booking.statusPayment === true && booking.active === false)
+              ? '-'
+              : ''}
+          </Table.Cell>
+        </Table.Row>
+      );
+    });
+  };
+
+  if (!bookings.length) return null;
 
   return (
     <div>
       <WarningModal
         open={openWarningModal}
         setOpen={setOpenWarningModal}
+        id={bookingId}
+        action={handleCancelBooking}
         title={'Delete Booking'}
       />
 
@@ -39,43 +139,9 @@ export default () => {
             </Table.Row>
           </Table.Header>
 
-          <Table.Body>
-            <Table.Row>
-              <Table.Cell>1</Table.Cell>
-              <Table.Cell>
-                <div className="text-center">3</div>
-              </Table.Cell>
-              <Table.Cell>
-                <div className="text-center">5</div>
-              </Table.Cell>
-              <Table.Cell>17 Apr 20</Table.Cell>
-              <Table.Cell>20 Apr 20</Table.Cell>
-              <Table.Cell>
-                <div className="text-center">4</div>
-              </Table.Cell>
-              <Table.Cell>
-                Rp 520.000 x 3 nights = <br />
-                Rp 1.560.000
-              </Table.Cell>
-              <Table.Cell>Waiting for payment</Table.Cell>
-              <Table.Cell>15 Apr 20</Table.Cell>
-              <Table.Cell>15 Apr 20</Table.Cell>
-              <Table.Cell>
-                <Button
-                  negative
-                  onClick={() => {
-                    setOpenWarningModal(true);
-                  }}
-                >
-                  Delete
-                </Button>
-              </Table.Cell>
-            </Table.Row>
-          </Table.Body>
+          <Table.Body>{renderContent()}</Table.Body>
         </Table>
       </div>
-
-      <Pagination />
     </div>
   );
 };

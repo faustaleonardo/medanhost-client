@@ -121,11 +121,13 @@ export default () => {
               component={ManageRoomList}
             />
           </RoomProvider>
-          <Route
-            exact
-            path="/admin/bookings/manage"
-            component={ManageBookingList}
-          />
+          <BookingProvider>
+            <Route
+              exact
+              path="/admin/bookings/manage"
+              component={ManageBookingList}
+            />
+          </BookingProvider>
           <Route
             exact
             path="/admin/reviews/manage"
