@@ -88,7 +88,9 @@ export default () => {
             {room.beds} Beds <br />
             {room.baths} Baths <br />
           </Table.Cell>
-          <Table.Cell>{formatCurrency(room.price)}</Table.Cell>
+          <Table.Cell>
+            <span color="green">{formatCurrency(room.price)}</span>
+          </Table.Cell>
           <Table.Cell>
             <Button.Group>
               <Button

@@ -1,28 +1,109 @@
-import React, { useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect, useContext } from 'react';
 import { Table, Button, Icon } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import { AuthContext } from 'context/auth/authState';
+import MapModal from 'components/modals/MapModal';
 
-import Pagination from 'components/partials/Pagination';
-import WarningModal from 'components/partials/WarningModal';
+import axiosInstance from 'utils/axiosInstance';
+import formatCurrency from 'utils/formatCurrency';
+import formatDate from 'utils/formatDate';
+import * as opencage from 'opencage-api-client';
 
 export default () => {
-  const [openWarningModal, setOpenWarningModal] = useState(false);
+  const { auth } = useContext(AuthContext);
+
+  const [bookings, setBookings] = useState([]);
+  const [openMapModal, setOpenMapModal] = useState(false);
+  const [position, setPosition] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const bookingsData = [];
+
+      const response = await axiosInstance.get(
+        `/api/v1/rooms/hosts/${auth.id}`
+      );
+      const rooms = response.data;
+
+      for (const room of rooms) {
+        for (const booking of room.bookings) {
+          const data = {
+            ...booking,
+            name: room.name,
+            location: room.location,
+            type: room.type.value,
+          };
+          bookingsData.push(data);
+        }
+      }
+
+      setBookings(bookingsData);
+    };
+    if (auth) fetchData();
+  }, [auth]);
+
+  const handleShowLocation = async (location) => {
+    const response = await opencage.geocode({
+      key: process.env.REACT_APP_OPENCAGE_API_KEY,
+      q: location,
+    });
+    const { geometry } = response.results[0];
+    const lat = geometry.lat;
+    const lng = geometry.lng;
+
+    setPosition([lat, lng]);
+    setOpenMapModal(true);
+  };
+
+  if (!auth || !bookings) return null;
+
+  const renderContent = () => {
+    return bookings.map((booking) => {
+      return (
+        <Table.Row key={booking.id}>
+          <Table.Cell>{booking.name}</Table.Cell>
+          <Table.Cell>{booking.type}</Table.Cell>
+          <Table.Cell>
+            {booking.location}
+            <br />
+            <div className="mt-05r">
+              <Button
+                icon
+                labelPosition="left"
+                onClick={() => handleShowLocation(booking.location)}
+              >
+                <Icon name="map marker alternate" />
+                Show Location
+              </Button>
+            </div>
+          </Table.Cell>
+          <Table.Cell>{formatDate(booking.checkInDate)}</Table.Cell>
+          <Table.Cell>{formatDate(booking.checkOutDate)}</Table.Cell>
+          <Table.Cell>
+            <div className="text-center">{booking.guests}</div>
+          </Table.Cell>
+          <Table.Cell>
+            <span className="green">{formatCurrency(booking.price)}</span>
+          </Table.Cell>
+        </Table.Row>
+      );
+    });
+  };
 
   return (
     <div>
-      <WarningModal
-        open={openWarningModal}
-        setOpen={setOpenWarningModal}
-        title={'Delete Room'}
+      <MapModal
+        open={openMapModal}
+        setOpen={setOpenMapModal}
+        position={position}
       />
-
       <h1>Upcoming Bookings</h1>
       <div className="mt-1r mb-3r">
         <Table striped>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>Name</Table.HeaderCell>
-              <Table.HeaderCell>Types Of Place</Table.HeaderCell>
+              <Table.HeaderCell>Type Of Place</Table.HeaderCell>
               <Table.HeaderCell>Location</Table.HeaderCell>
               <Table.HeaderCell>Check in</Table.HeaderCell>
               <Table.HeaderCell>Check out</Table.HeaderCell>
@@ -33,36 +114,9 @@ export default () => {
             </Table.Row>
           </Table.Header>
 
-          <Table.Body>
-            <Table.Row>
-              <Table.Cell>
-                <Link to="/rooms/1">CBD Ayola</Link>
-              </Table.Cell>
-              <Table.Cell>Shared Room</Table.Cell>
-              <Table.Cell>
-                Jalan Ustad Abdul Hamid No.32, Tanjungbalai <br />
-                <div className="mt-05r">
-                  <Button icon labelPosition="left">
-                    <Icon name="map marker alternate" />
-                    Show Location
-                  </Button>
-                </div>
-              </Table.Cell>
-              <Table.Cell>17 Apr 20</Table.Cell>
-              <Table.Cell>20 Apr 20</Table.Cell>
-              <Table.Cell>
-                <div className="text-center">3</div>
-              </Table.Cell>
-              <Table.Cell>
-                Rp 520.000 x 3 nights =<br />
-                Rp 1.500.000
-              </Table.Cell>
-            </Table.Row>
-          </Table.Body>
+          <Table.Body>{renderContent()}</Table.Body>
         </Table>
       </div>
-
-      <Pagination />
     </div>
   );
 };
