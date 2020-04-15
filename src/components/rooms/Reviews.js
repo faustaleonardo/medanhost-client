@@ -78,51 +78,35 @@ export default () => {
   const renderContent = () => {
     return rooms.map((room) => {
       return (
-        <div className="mb-3r" key={room.id}>
-          <Table striped>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>Name</Table.HeaderCell>
-                <Table.HeaderCell>Location</Table.HeaderCell>
-                <Table.HeaderCell>Brief Description</Table.HeaderCell>
-                <Table.HeaderCell>Price / Night</Table.HeaderCell>
-                <Table.HeaderCell>Action</Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-
-            <Table.Body>
-              <Table.Row>
-                <Table.Cell>{room.name}</Table.Cell>
-                <Table.Cell>
-                  {room.location} <br />
-                  <div className="mt-05r">
-                    <Button
-                      icon
-                      labelPosition="left"
-                      onClick={() => {
-                        handleShowLocation(room.location);
-                      }}
-                    >
-                      <Icon name="map marker alternate" />
-                      Show Location
-                    </Button>
-                  </div>
-                </Table.Cell>
-                <Table.Cell>
-                  {room.bedrooms}Bedrooms <br />
-                  {room.beds} Beds <br />
-                  {room.baths} Baths <br />
-                </Table.Cell>
-                <Table.Cell>{formatCurrency(room.price)}</Table.Cell>
-                <Table.Cell>
-                  <Button positive onClick={() => handleReviewModal(room.id)}>
-                    Your Review
-                  </Button>
-                </Table.Cell>
-              </Table.Row>
-            </Table.Body>
-          </Table>
-        </div>
+        <Table.Row key={room.id}>
+          <Table.Cell>{room.name}</Table.Cell>
+          <Table.Cell>
+            {room.location} <br />
+            <div className="mt-05r">
+              <Button
+                icon
+                labelPosition="left"
+                onClick={() => {
+                  handleShowLocation(room.location);
+                }}
+              >
+                <Icon name="map marker alternate" />
+                Show Location
+              </Button>
+            </div>
+          </Table.Cell>
+          <Table.Cell>
+            {room.bedrooms}Bedrooms <br />
+            {room.beds} Beds <br />
+            {room.baths} Baths <br />
+          </Table.Cell>
+          <Table.Cell>{formatCurrency(room.price)}</Table.Cell>
+          <Table.Cell>
+            <Button positive onClick={() => handleReviewModal(room.id)}>
+              Your Review
+            </Button>
+          </Table.Cell>
+        </Table.Row>
       );
     });
   };
@@ -146,7 +130,22 @@ export default () => {
 
       <h1>Your Reviews</h1>
       {info ? <Message info>{info}</Message> : ''}
-      {renderContent()}
+
+      <div className="mb-3r">
+        <Table striped>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Name</Table.HeaderCell>
+              <Table.HeaderCell>Location</Table.HeaderCell>
+              <Table.HeaderCell>Brief Description</Table.HeaderCell>
+              <Table.HeaderCell>Price / Night</Table.HeaderCell>
+              <Table.HeaderCell>Action</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+
+          <Table.Body>{renderContent()}</Table.Body>
+        </Table>
+      </div>
     </div>
   );
 };

@@ -1,7 +1,41 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 
+import axiosInstance from 'utils/axiosInstance';
+
 export default () => {
+  const [monthStats, setMonthStats] = useState([]);
+  const [yearStatsLabel, setYearStatsLabel] = useState([]);
+  const [yearStats, setYearStats] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      // month
+      let response = await axiosInstance.get('/api/v1/bookings/incomes/month');
+      let result = response.data;
+
+      let data = [...new Array(12)].map((el, index) => {
+        const month = index + 1;
+        const match = result.find((each) => each.month_number * 1 === month);
+        if (match && match.year * 1 === new Date().getFullYear())
+          return match.total;
+        else return 0;
+      });
+      setMonthStats(data);
+
+      // year
+      response = await axiosInstance.get('/api/v1/bookings/incomes/year');
+      result = response.data;
+
+      const years = result.map((el) => el.year);
+      setYearStatsLabel(years);
+
+      const total = result.map((el) => el.total);
+      setYearStats(total);
+    };
+    fetchData();
+  }, []);
+
   const monthsData = {
     labels: [
       'Jan',
@@ -20,7 +54,7 @@ export default () => {
     datasets: [
       {
         label: 'Income based on month this year',
-        data: [12, 19, 3, 5, 2, 3, 4, 5, 1, 2, 3, 4],
+        data: monthStats,
         backgroundColor: ['rgba(33, 186, 69, 0.2)'],
         borderWidth: 1,
       },
@@ -28,16 +62,18 @@ export default () => {
   };
 
   const yearsData = {
-    labels: [2018, 2019, 2020],
+    labels: yearStatsLabel,
     datasets: [
       {
         label: 'Income based on year',
-        data: [12, 9, 33],
+        data: yearStats,
         backgroundColor: ['rgba(33, 186, 69, 0.2)'],
         borderWidth: 1,
       },
     ],
   };
+
+  if (!monthStats) return;
 
   return (
     <div>

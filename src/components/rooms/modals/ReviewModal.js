@@ -22,6 +22,9 @@ export default ({ open, setOpen, id, action }) => {
         if (review) {
           setRatings(review.ratings);
           setComments(review.comments);
+        } else {
+          setRatings('');
+          setComments('');
         }
       } catch (err) {
         console.log(err.response);
