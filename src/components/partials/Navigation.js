@@ -16,6 +16,9 @@ export default () => {
       case 'bookings':
         history.push('/bookings');
         break;
+      case 'reviews':
+        history.push('/reviews');
+        break;
       case 'bookmarks':
         history.push('/rooms/bookmarks');
         break;
@@ -76,6 +79,7 @@ export default () => {
             <Fragment>
               <Menu.Item name="bookmarks" onClick={handleItemClick} />
               <Menu.Item name="bookings" onClick={handleItemClick} />
+              <Menu.Item name="reviews" onClick={handleItemClick} />
             </Fragment>
           );
         } else {

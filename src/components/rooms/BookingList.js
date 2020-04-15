@@ -1,26 +1,27 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext } from 'react';
 import { Table, Button, Icon, Message } from 'semantic-ui-react';
-import { useHistory } from 'react-router-dom';
-import ReviewModal from './modals/ReviewModal';
 import WarningModal from 'components/partials/WarningModal';
 import { BookingContext } from 'context/bookings/bookingState';
+import { AuthContext } from 'context/auth/authState';
 import MapModal from 'components/modals/MapModal';
 
+import StripeCheckout from 'react-stripe-checkout';
 import axiosInstance from 'utils/axiosInstance';
 import formatCurrency from 'utils/formatCurrency';
 import formatDate from 'utils/formatDate';
 import * as opencage from 'opencage-api-client';
 
 export default () => {
-  const history = useHistory();
-
   const { bookings, setBookings, updateBooking } = useContext(BookingContext);
+  const { auth } = useContext(AuthContext);
+
   const [openWarningModal, setOpenWarningModal] = useState(false);
-  const [openReview, setOpenReview] = useState(false);
   const [openMapModal, setOpenMapModal] = useState(false);
   const [position, setPosition] = useState([]);
   const [bookingId, setBookingId] = useState('');
+  const [submitChange, setSubmitChange] = useState(false);
+  const [info, setInfo] = useState('');
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -30,7 +31,7 @@ export default () => {
       setBookings(data);
     };
     fetchBookings();
-  }, []);
+  }, [submitChange]);
 
   const handleShowLocation = async (location) => {
     const response = await opencage.geocode({
@@ -59,11 +60,21 @@ export default () => {
       const data = response.data;
 
       updateBooking(data);
-      history.push('/bookings');
+      setSubmitChange(!submitChange);
       setOpenWarningModal(false);
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const handleStripeToken = async (bookingId, token) => {
+    await axiosInstance.patch(`api/v1/bookings/${bookingId}/stripe`, {
+      token: token.id,
+    });
+    setInfo(
+      'Thank you for paying your booking. We would be much appricated if you give a review about your experience :)'
+    );
+    setSubmitChange(!submitChange);
   };
 
   const renderContent = () => {
@@ -84,9 +95,10 @@ export default () => {
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>Status</Table.HeaderCell>
+                <Table.HeaderCell>Name</Table.HeaderCell>
                 <Table.HeaderCell>Location</Table.HeaderCell>
                 <Table.HeaderCell>
-                  <div className="text-center">Guest</div>
+                  <div className="text-center">Guests</div>
                 </Table.HeaderCell>
                 <Table.HeaderCell>Date</Table.HeaderCell>
                 <Table.HeaderCell>Total</Table.HeaderCell>
@@ -105,7 +117,7 @@ export default () => {
                   )}
                   {booking.statusPayment === true &&
                   booking.active === false ? (
-                    <span>Paid</span>
+                    <span className="green">Paid</span>
                   ) : (
                     ''
                   )}
@@ -116,6 +128,7 @@ export default () => {
                     ''
                   )}
                 </Table.Cell>
+                <Table.Cell>{booking.room.name}</Table.Cell>
                 <Table.Cell>
                   {booking.room.location} <br />
                   <div className="mt-05r">
@@ -144,16 +157,36 @@ export default () => {
                   <span className="green">{formatCurrency(booking.price)}</span>
                 </Table.Cell>
                 <Table.Cell>
-                  <Button.Group>
-                    <Button positive>Pay now</Button>
-                    <Button.Or />
-                    <Button
-                      negative
-                      onClick={() => handleCancelModal(booking.id)}
-                    >
-                      Cancel
-                    </Button>
-                  </Button.Group>
+                  {booking.statusPayment === false &&
+                  booking.active === true ? (
+                    <Button.Group>
+                      <StripeCheckout
+                        name="Medanhost XYZ"
+                        description="Book your dream room now :)"
+                        amount={booking.price * 100}
+                        currency="IDR"
+                        stripeKey={process.env.REACT_APP_PUBLISHABLE_KEY}
+                        email={auth.email}
+                        token={(token) => handleStripeToken(booking.id, token)}
+                      >
+                        <Button positive>Pay now</Button>
+                      </StripeCheckout>
+                      <Button.Or />
+                      <Button
+                        negative
+                        onClick={() => handleCancelModal(booking.id)}
+                      >
+                        Cancel
+                      </Button>
+                    </Button.Group>
+                  ) : (
+                    ''
+                  )}
+                  {(booking.statusPayment === false &&
+                    booking.active === false) ||
+                  (booking.statusPayment === true && booking.active === false)
+                    ? '-'
+                    : ''}
                 </Table.Cell>
               </Table.Row>
             </Table.Body>
@@ -163,7 +196,7 @@ export default () => {
     });
   };
 
-  if (!bookings) return null;
+  if (!bookings || !auth) return null;
 
   return (
     <div>
@@ -180,9 +213,8 @@ export default () => {
         position={position}
       />
 
-      <ReviewModal open={openReview} setOpen={setOpenReview} />
-
       <h1>Your Bookings</h1>
+      {info ? <Message info>{info}</Message> : ''}
       {renderContent()}
     </div>
   );

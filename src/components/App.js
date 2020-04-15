@@ -16,6 +16,7 @@ import LoginOtp from 'components/auth/LoginOtp';
 // guest
 import RoomList from 'components/rooms/RoomList';
 import Bookmarks from 'components/rooms/Bookmarks';
+import Reviews from 'components/rooms/Reviews';
 import RoomDetails from 'components/rooms/RoomDetails';
 import BookingList from 'components/rooms/BookingList';
 
@@ -60,7 +61,8 @@ export default () => {
               <Route exact path="/" component={SearchForm} />
               <Route exact path="/rooms" component={RoomList} />
               <Route exact path="/rooms/:id" component={RoomDetails} />
-              <Route exact path="/rooms/bookmarks" component={Bookmarks} />
+              <Route exact path="/bookmarks" component={Bookmarks} />
+              <Route exact path="/reviews" component={Reviews} />
             </RoomProvider>
             <BookingProvider>
               <Route exact path="/bookings" component={BookingList} />
