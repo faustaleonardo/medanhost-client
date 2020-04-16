@@ -104,6 +104,7 @@ export default () => {
       setLoadingConfirm(false);
       history.push('/bookings');
     } catch (err) {
+      console.log(err);
       setLoadingConfirm(false);
     }
   };

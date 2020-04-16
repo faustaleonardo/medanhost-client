@@ -33,7 +33,19 @@ export default () => {
       setOpen(false);
       setAuth(user);
       localStorage.setItem('jwt', jwt);
-      history.push(`/`);
+      switch (user.role.id) {
+        case 1:
+          history.push('/admin/users/manage');
+          break;
+        case 2:
+          history.push(`/`);
+          break;
+        case 3:
+          history.push('/host/rooms');
+          break;
+        default:
+          break;
+      }
     } catch (err) {
       setError(err.response.data.message);
     }

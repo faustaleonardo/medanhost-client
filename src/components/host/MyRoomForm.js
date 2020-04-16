@@ -10,11 +10,14 @@ import { Form, Button, Message, Card, Icon } from 'semantic-ui-react';
 import axiosInstance from 'utils/axiosInstance';
 import LocationModal from './modals/LocationModal';
 import { RoomContext } from 'context/rooms/roomState';
+import { AuthContext } from 'context/auth/authState';
 import { useHistory, useParams } from 'react-router-dom';
 import WarningModal from 'components/partials/WarningModal';
+import { Redirect } from 'react-router-dom';
 
 export default ({ title, buttonName }) => {
   const { addRoom, updateRoom } = useContext(RoomContext);
+  const { auth } = useContext(AuthContext);
   const history = useHistory();
 
   const { id } = useParams();
@@ -180,7 +183,9 @@ export default ({ title, buttonName }) => {
     }
   };
 
+  if (!auth) return <Redirect to="/" />;
   if (!types.length) return null;
+
   return (
     <Fragment>
       <LocationModal

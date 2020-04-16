@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Table, Button, Icon, Message } from 'semantic-ui-react';
 import { AuthContext } from 'context/auth/authState';
+import { Redirect } from 'react-router-dom';
 import MapModal from 'components/modals/MapModal';
 import ReviewModal from './modals/ReviewModal';
 
@@ -111,7 +112,9 @@ export default () => {
     });
   };
 
-  if (!auth || !rooms) return null;
+  if (!auth) return <Redirect to="/" />;
+
+  if (!rooms) return null;
 
   return (
     <div>

@@ -4,11 +4,15 @@ import { Table, Button } from 'semantic-ui-react';
 import WarningModal from 'components/partials/WarningModal';
 import axiosInstance from 'utils/axiosInstance';
 import { UserContext } from 'context/users/userState';
+import { Redirect } from 'react-router-dom';
+import { AuthContext } from 'context/auth/authState';
 
 export default () => {
+  const { users, setUsers, deleteUser } = useContext(UserContext);
+  const { auth } = useContext(AuthContext);
+
   const [openWarningModal, setOpenWarningModal] = useState(false);
   const [userId, setUserId] = useState(null);
-  const { users, setUsers, deleteUser } = useContext(UserContext);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -58,6 +62,7 @@ export default () => {
     });
   };
 
+  if (!auth) return <Redirect to="/" />;
   if (!users.length) return null;
 
   return (

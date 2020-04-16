@@ -21,10 +21,13 @@ import TypeOfPlaceModal from './modals/TypeOfPlaceModal';
 import PriceModal from './modals/PriceModal';
 import SearchDetailsModal from './modals/SearchDetailsModal';
 import MapModal from 'components/modals/MapModal';
+import { AuthContext } from 'context/auth/authState';
 
 export default () => {
   const { search } = useContext(SearchContext);
   const { rooms, setRooms } = useContext(RoomContext);
+  const { auth } = useContext(AuthContext);
+
   const [position, setPosition] = useState([]);
   const [type, setType] = useState('');
   const [minPrice, setMinPrice] = useState('');
@@ -88,8 +91,6 @@ export default () => {
     setOpenPrice(false);
   };
 
-  if (!search) return <Redirect to="/" />;
-
   const renderContent = () => {
     return rooms.map((room) => {
       return (
@@ -132,6 +133,8 @@ export default () => {
       );
     });
   };
+
+  if (!auth || !search) return <Redirect to="/" />;
 
   return (
     <div>

@@ -4,15 +4,18 @@ import { Table, Button, Icon } from 'semantic-ui-react';
 import { useHistory } from 'react-router-dom';
 import axiosInstance from 'utils/axiosInstance';
 import * as opencage from 'opencage-api-client';
+import { Redirect } from 'react-router-dom';
 
 import WarningModal from 'components/partials/WarningModal';
 import { RoomContext } from 'context/rooms/roomState';
+import { AuthContext } from 'context/auth/authState';
 import MapModal from 'components/modals/MapModal';
 import formatCurrency from 'utils/formatCurrency';
 
 export default () => {
   const history = useHistory();
   const { rooms, setRooms, deleteRoom } = useContext(RoomContext);
+  const { auth } = useContext(AuthContext);
 
   const [openWarningModal, setOpenWarningModal] = useState(false);
   const [openMapModal, setOpenMapModal] = useState(false);
@@ -109,6 +112,7 @@ export default () => {
     });
   };
 
+  if (!auth) return <Redirect to="/" />;
   if (!rooms.length) return null;
 
   return (

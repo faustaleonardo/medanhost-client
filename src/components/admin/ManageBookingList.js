@@ -3,6 +3,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Table, Button } from 'semantic-ui-react';
 import WarningModal from 'components/partials/WarningModal';
 import { BookingContext } from 'context/bookings/bookingState';
+import { Redirect } from 'react-router-dom';
+import { AuthContext } from 'context/auth/authState';
 
 import axiosInstance from 'utils/axiosInstance';
 import formatCurrency from 'utils/formatCurrency';
@@ -10,18 +12,24 @@ import formatDate from 'utils/formatDate';
 
 export default () => {
   const { bookings, setBookings, updateBooking } = useContext(BookingContext);
+  const { auth } = useContext(AuthContext);
+
   const [openWarningModal, setOpenWarningModal] = useState(false);
   const [bookingId, setBookingId] = useState('');
   const [submitChange, setSubmitChange] = useState(false);
 
+  const fetchRooms = async () => {
+    const response = await axiosInstance.get('/api/v1/bookings/all');
+    const data = response.data;
+
+    setBookings(data);
+  };
+
   useEffect(() => {
-    const fetchRooms = async () => {
-      const response = await axiosInstance.get('/api/v1/bookings/all');
-      const data = response.data;
+    fetchRooms();
+  }, []);
 
-      setBookings(data);
-    };
-
+  useEffect(() => {
     fetchRooms();
   }, [submitChange]);
 
@@ -102,6 +110,7 @@ export default () => {
     });
   };
 
+  if (!auth) return <Redirect to="/" />;
   if (!bookings.length) return null;
 
   return (

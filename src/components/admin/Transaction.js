@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Line } from 'react-chartjs-2';
+import { Redirect } from 'react-router-dom';
+import { AuthContext } from 'context/auth/authState';
 
 import axiosInstance from 'utils/axiosInstance';
 
 export default () => {
+  const { auth } = useContext(AuthContext);
+
   const [monthStats, setMonthStats] = useState([]);
   const [yearStatsLabel, setYearStatsLabel] = useState([]);
   const [yearStats, setYearStats] = useState([]);
@@ -78,6 +82,9 @@ export default () => {
       },
     ],
   };
+
+  if (!auth) return <Redirect to="/" />;
+  if (!monthStats || !yearStats) return null;
 
   return (
     <div>

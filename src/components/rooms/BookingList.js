@@ -1,10 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext } from 'react';
-import { Table, Button, Icon, Message } from 'semantic-ui-react';
+import { Table, Button, Icon, Message, Divider } from 'semantic-ui-react';
 import WarningModal from 'components/partials/WarningModal';
 import { BookingContext } from 'context/bookings/bookingState';
 import { AuthContext } from 'context/auth/authState';
 import MapModal from 'components/modals/MapModal';
+import { Redirect } from 'react-router-dom';
 
 import StripeCheckout from 'react-stripe-checkout';
 import axiosInstance from 'utils/axiosInstance';
@@ -91,7 +92,7 @@ export default () => {
           ) : (
             ''
           )}
-          <Table striped>
+          <Table fixed>
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>Status</Table.HeaderCell>
@@ -159,7 +160,7 @@ export default () => {
                 <Table.Cell>
                   {booking.statusPayment === false &&
                   booking.active === true ? (
-                    <Button.Group>
+                    <div className="text-center">
                       <StripeCheckout
                         name="Medanhost XYZ"
                         description="Book your dream room now :)"
@@ -171,14 +172,14 @@ export default () => {
                       >
                         <Button positive>Pay now</Button>
                       </StripeCheckout>
-                      <Button.Or />
+                      <Divider horizontal>Or</Divider>
                       <Button
                         negative
                         onClick={() => handleCancelModal(booking.id)}
                       >
                         Cancel
                       </Button>
-                    </Button.Group>
+                    </div>
                   ) : (
                     ''
                   )}
@@ -196,7 +197,9 @@ export default () => {
     });
   };
 
-  if (!bookings || !auth) return null;
+  if (!auth) return <Redirect to="/" />;
+
+  if (!bookings) return null;
 
   return (
     <div>

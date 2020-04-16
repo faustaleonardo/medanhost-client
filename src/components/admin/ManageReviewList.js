@@ -2,6 +2,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Table, Button, Rating } from 'semantic-ui-react';
 import WarningModal from 'components/partials/WarningModal';
+import { Redirect } from 'react-router-dom';
+import { AuthContext } from 'context/auth/authState';
 
 import axiosInstance from 'utils/axiosInstance';
 import { ReviewContext } from 'context/reviews/reviewState';
@@ -9,6 +11,7 @@ import formatDate from 'utils/formatDate';
 
 export default () => {
   const { reviews, setReviews, deleteReview } = useContext(ReviewContext);
+  const { auth } = useContext(AuthContext);
 
   const [openWarningModal, setOpenWarningModal] = useState(false);
   const [reviewId, setReviewId] = useState(null);
@@ -71,6 +74,7 @@ export default () => {
     });
   };
 
+  if (!auth) return <Redirect to="/" />;
   if (!reviews.length) return null;
 
   return (

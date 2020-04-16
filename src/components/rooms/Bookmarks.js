@@ -1,15 +1,18 @@
 import React, { useState, useContext } from 'react';
 import * as opencage from 'opencage-api-client';
+import { Redirect } from 'react-router-dom';
 
 import { Table, Icon, Button } from 'semantic-ui-react';
 import WarningModal from 'components/partials/WarningModal';
 import MapModal from 'components/modals/MapModal';
 import { BookmarkContext } from 'context/bookmarks/bookmarkState';
+import { AuthContext } from 'context/auth/authState';
 import formatCurrency from 'utils/formatCurrency';
 import axiosInstance from 'utils/axiosInstance';
 
 export default () => {
   const { bookmarks, deleteBookmark } = useContext(BookmarkContext);
+  const { auth } = useContext(AuthContext);
 
   const [openWarningModal, setOpenWarningModal] = useState(false);
   const [openMapModal, setOpenMapModal] = useState(false);
@@ -79,6 +82,8 @@ export default () => {
       );
     });
   };
+
+  if (!auth) return <Redirect to="/" />;
 
   if (!bookmarks) return null;
 

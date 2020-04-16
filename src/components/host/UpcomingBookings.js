@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext } from 'react';
 import { Table, Button, Icon } from 'semantic-ui-react';
+import { Redirect } from 'react-router-dom';
 import { AuthContext } from 'context/auth/authState';
 import MapModal from 'components/modals/MapModal';
 
@@ -55,8 +56,6 @@ export default () => {
     setOpenMapModal(true);
   };
 
-  if (!auth || !bookings) return null;
-
   const renderContent = () => {
     return bookings.map((booking) => {
       return (
@@ -90,6 +89,9 @@ export default () => {
     });
   };
 
+  if (!auth) return <Redirect to="/" />;
+
+  if (!bookings) return null;
   return (
     <div>
       <MapModal

@@ -7,9 +7,12 @@ import WarningModal from 'components/partials/WarningModal';
 import MapModal from 'components/modals/MapModal';
 import axiosInstance from 'utils/axiosInstance';
 import { RoomContext } from 'context/rooms/roomState';
+import { Redirect } from 'react-router-dom';
+import { AuthContext } from 'context/auth/authState';
 
 export default () => {
   const { rooms, setRooms, deleteRoom } = useContext(RoomContext);
+  const { auth } = useContext(AuthContext);
 
   const [openWarningModal, setOpenWarningModal] = useState(false);
   const [openMapModal, setOpenMapModal] = useState(false);
@@ -97,6 +100,7 @@ export default () => {
     });
   };
 
+  if (!auth) return <Redirect to="/" />;
   if (!rooms.length) return null;
 
   return (
