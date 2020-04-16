@@ -6,17 +6,21 @@ import {
   Rating,
   Comment,
   Message,
+  Dimmer,
+  Loader,
 } from 'semantic-ui-react';
 import axiosInstance from 'utils/axiosInstance';
 
 export default ({ open, setOpen, id, action }) => {
   const [error, setError] = useState(null);
-  const [ratings, setRatings] = useState(4);
+  const [ratings, setRatings] = useState(null);
   const [comments, setComments] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchReview = async () => {
       try {
+        setLoading(true);
         const response = await axiosInstance.get(`/api/v1/reviews/rooms/${id}`);
         const review = response.data;
         if (review) {
@@ -29,6 +33,7 @@ export default ({ open, setOpen, id, action }) => {
       } catch (err) {
         console.log(err.response);
       }
+      setLoading(false);
     };
     if (parseInt(id)) fetchReview();
   }, [id]);
@@ -45,6 +50,13 @@ export default ({ open, setOpen, id, action }) => {
     };
     action(data);
   };
+
+  if (loading === true)
+    return (
+      <Dimmer active>
+        <Loader>Loading</Loader>
+      </Dimmer>
+    );
   return (
     <Modal size={'tiny'} open={open} onClose={() => setOpen(false)}>
       <Modal.Header>Review Room</Modal.Header>

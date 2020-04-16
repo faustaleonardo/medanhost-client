@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext } from 'react';
-import { Table, Button } from 'semantic-ui-react';
-import WarningModal from 'components/partials/WarningModal';
+import { Table, Button, Message } from 'semantic-ui-react';
 import axiosInstance from 'utils/axiosInstance';
-import { UserContext } from 'context/users/userState';
 import { Redirect } from 'react-router-dom';
+
+import { UserContext } from 'context/users/userState';
 import { AuthContext } from 'context/auth/authState';
+import WarningModal from 'components/partials/WarningModal';
 
 export default () => {
   const { users, setUsers, deleteUser } = useContext(UserContext);
@@ -13,6 +14,7 @@ export default () => {
 
   const [openWarningModal, setOpenWarningModal] = useState(false);
   const [userId, setUserId] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -36,10 +38,11 @@ export default () => {
       await axiosInstance.delete(`/api/v1/users/${userId}`);
 
       deleteUser(userId);
-      setOpenWarningModal(false);
     } catch (err) {
-      console.log(err);
+      setError(err.response.data.message);
+      console.log(err.response.data);
     }
+    setOpenWarningModal(false);
   };
 
   const renderContent = () => {
@@ -53,16 +56,20 @@ export default () => {
           <Table.Cell>{user.lastName}</Table.Cell>
           <Table.Cell>{user.role.value}</Table.Cell>
           <Table.Cell>
-            <Button negative onClick={() => handleDeleteModal(user.id)}>
-              Delete
-            </Button>
+            {user.role.id === 1 ? (
+              '-'
+            ) : (
+              <Button negative onClick={() => handleDeleteModal(user.id)}>
+                Delete
+              </Button>
+            )}
           </Table.Cell>
         </Table.Row>
       );
     });
   };
 
-  if (!auth) return <Redirect to="/" />;
+  if (auth === false) return <Redirect to="/" />;
   if (!users.length) return null;
 
   return (
@@ -76,6 +83,7 @@ export default () => {
       />
 
       <h1>Users</h1>
+      {error ? <Message negative>{error}</Message> : ''}
       <div className="mb-3r">
         <Table striped>
           <Table.Header>

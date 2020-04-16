@@ -25,7 +25,7 @@ import BookingList from 'components/rooms/BookingList';
 // host
 import MyRoomList from 'components/host/MyRoomList';
 import MyRoomForm from 'components/host/MyRoomForm';
-import UpcomingBookings from 'components/host/UpcomingBookings';
+import UpcomingRoomBookings from 'components/host/UpcomingRoomBookings';
 import Revenue from 'components/host/Revenue';
 
 // admin
@@ -102,7 +102,11 @@ export default () => {
               )}
             />
 
-            <Route exact path="/host/bookings" component={UpcomingBookings} />
+            <Route
+              exact
+              path="/host/bookings"
+              component={UpcomingRoomBookings}
+            />
             <Route exact path="/host/revenue" component={Revenue} />
           </RoomProvider>
 

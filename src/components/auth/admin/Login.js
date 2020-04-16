@@ -3,10 +3,10 @@ import { Button, Segment, Divider, Message } from 'semantic-ui-react';
 import GoogleLogin from 'react-google-login';
 import axiosInstance from 'utils/axiosInstance';
 import { AuthContext } from 'context/auth/authState';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Redirect } from 'react-router-dom';
 
 export default () => {
-  const { setAuth } = useContext(AuthContext);
+  const { auth, setAuth } = useContext(AuthContext);
   const [error, setError] = useState(null);
 
   const handleEmailLogin = () => {
@@ -34,6 +34,8 @@ export default () => {
       setError(err.response.data.message);
     }
   };
+
+  if (auth) return <Redirect to="/" />;
 
   return (
     <div className="center-vh">

@@ -1,6 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext } from 'react';
-import { Table, Button, Icon, Message, Divider } from 'semantic-ui-react';
+import {
+  Table,
+  Button,
+  Icon,
+  Message,
+  Divider,
+  Dimmer,
+  Loader,
+} from 'semantic-ui-react';
 import WarningModal from 'components/partials/WarningModal';
 import { BookingContext } from 'context/bookings/bookingState';
 import { AuthContext } from 'context/auth/authState';
@@ -23,6 +31,8 @@ export default () => {
   const [bookingId, setBookingId] = useState('');
   const [submitChange, setSubmitChange] = useState(false);
   const [info, setInfo] = useState('');
+  const [loading, setLoading] = useState(false);
+
   const fetchBookings = async () => {
     const response = await axiosInstance.get('/api/v1/bookings');
     const data = response.data;
@@ -73,12 +83,14 @@ export default () => {
   };
 
   const handleStripeToken = async (bookingId, token) => {
+    setLoading(true);
     await axiosInstance.patch(`api/v1/bookings/${bookingId}/stripe`, {
       token: token.id,
     });
     setInfo(
       'Thank you for paying your booking. We would be much appricated if you give a review about your experience :)'
     );
+    setLoading(false);
     setSubmitChange(!submitChange);
   };
 
@@ -145,7 +157,7 @@ export default () => {
                       }}
                     >
                       <Icon name="map marker alternate" />
-                      Show Location
+                      Show
                     </Button>
                   </div>
                 </Table.Cell>
@@ -201,12 +213,15 @@ export default () => {
     });
   };
 
-  if (!auth) return <Redirect to="/" />;
+  if (auth === false) return <Redirect to="/" />;
 
-  if (!bookings) return null;
+  if (auth === null) return null;
 
   return (
     <div>
+      <Dimmer active={loading}>
+        <Loader>Loading</Loader>
+      </Dimmer>
       <WarningModal
         open={openWarningModal}
         setOpen={setOpenWarningModal}
@@ -222,7 +237,7 @@ export default () => {
 
       <h1>Your Bookings</h1>
       {info ? <Message info>{info}</Message> : ''}
-      {renderContent()}
+      {bookings.length ? renderContent() : <p>No record yet...</p>}
     </div>
   );
 };

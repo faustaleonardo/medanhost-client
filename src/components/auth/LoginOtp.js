@@ -1,11 +1,11 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Button, Form, Modal, Message } from 'semantic-ui-react';
 import axiosInstance from 'utils/axiosInstance';
-import { useParams } from 'react-router-dom';
+import { useParams, Redirect } from 'react-router-dom';
 import { AuthContext } from 'context/auth/authState';
 
 export default () => {
-  const { setAuth } = useContext(AuthContext);
+  const { auth, setAuth } = useContext(AuthContext);
 
   const [open, setOpen] = useState(false);
 
@@ -69,6 +69,8 @@ export default () => {
       setLoadingVerify(false);
     }
   };
+
+  if (auth) return <Redirect to="/" />;
 
   return (
     <div className="general-form center-vh">

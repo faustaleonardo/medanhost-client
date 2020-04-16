@@ -74,7 +74,7 @@ export default () => {
     });
   };
 
-  if (!auth) return <Redirect to="/" />;
+  if (auth === false) return <Redirect to="/" />;
   if (!reviews.length) return null;
 
   return (

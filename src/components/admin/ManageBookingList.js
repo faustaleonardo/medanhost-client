@@ -110,7 +110,7 @@ export default () => {
     });
   };
 
-  if (!auth) return <Redirect to="/" />;
+  if (auth === false) return <Redirect to="/" />;
   if (!bookings.length) return null;
 
   return (

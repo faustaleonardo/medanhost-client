@@ -1,4 +1,5 @@
-import React, { useState, useContext } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useContext, useEffect } from 'react';
 import {
   Form,
   Button,
@@ -14,7 +15,7 @@ import { useHistory } from 'react-router-dom';
 import convertToMMDDYYYY from 'utils/convertToMMDDYYYY';
 
 export default () => {
-  const { setSearch } = useContext(SearchContext);
+  const { search, setSearch } = useContext(SearchContext);
   const { auth } = useContext(AuthContext);
 
   const [location, setLocation] = useState('');
@@ -22,6 +23,14 @@ export default () => {
   const [guests, setGuests] = useState(0);
   const [error, setError] = useState('');
   const history = useHistory();
+
+  useEffect(() => {
+    if (search) {
+      setLocation(search.location);
+      setDatesRange(search.datesRange);
+      setGuests(search.guests);
+    }
+  }, []);
 
   const handleSubmit = () => {
     if (!location || !datesRange || !guests) {
@@ -46,6 +55,8 @@ export default () => {
   const handleDateChange = (event, { name, value }) => {
     setDatesRange(value);
   };
+
+  if (auth === null) return null;
 
   return (
     <div className="general-form center-vh">

@@ -182,7 +182,7 @@ export default ({ title, buttonName }) => {
     }
   };
 
-  if (!auth) return <Redirect to="/" />;
+  if (auth === false) return <Redirect to="/" />;
   if (!types.length) return null;
 
   return (

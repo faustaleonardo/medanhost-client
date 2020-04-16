@@ -63,7 +63,7 @@ export default () => {
                 }}
               >
                 <Icon name="map marker alternate" />
-                Show Location
+                Show
               </Button>
             </div>
           </Table.Cell>
@@ -83,10 +83,9 @@ export default () => {
     });
   };
 
-  if (!auth) return <Redirect to="/" />;
+  if (auth === false) return <Redirect to="/" />;
 
-  if (!bookmarks) return null;
-
+  if (auth === null || !bookmarks) return null;
   return (
     <div>
       <MapModal

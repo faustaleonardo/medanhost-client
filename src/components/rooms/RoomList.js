@@ -81,7 +81,7 @@ export default () => {
   };
 
   const handleSubmitType = (typesArr) => {
-    if (typesArr.length) setType(typesArr.toString());
+    setType(typesArr.toString());
     setOpenTypeOfPlace(false);
   };
 
@@ -124,7 +124,7 @@ export default () => {
                   onClick={() => handleShowLocation(room.location)}
                 >
                   <Icon name="map marker alternate" />
-                  Show Location
+                  Show
                 </Button>
               </Card.Description>
             </Card.Content>

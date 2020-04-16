@@ -22,7 +22,7 @@ export default () => {
       const bookingsData = [];
 
       const response = await axiosInstance.get(
-        `/api/v1/rooms/hosts/${auth.id}`
+        `/api/v1/rooms/hosts/${auth.id}/bookings`
       );
       const rooms = response.data;
 
@@ -72,7 +72,7 @@ export default () => {
                 onClick={() => handleShowLocation(booking.location)}
               >
                 <Icon name="map marker alternate" />
-                Show Location
+                Show
               </Button>
             </div>
           </Table.Cell>
@@ -89,9 +89,8 @@ export default () => {
     });
   };
 
-  if (!auth) return <Redirect to="/" />;
+  if (auth === false) return <Redirect to="/" />;
 
-  if (!bookings) return null;
   return (
     <div>
       <MapModal
@@ -101,23 +100,27 @@ export default () => {
       />
       <h1>Upcoming Bookings</h1>
       <div className="mt-1r mb-3r">
-        <Table striped>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Name</Table.HeaderCell>
-              <Table.HeaderCell>Type Of Place</Table.HeaderCell>
-              <Table.HeaderCell>Location</Table.HeaderCell>
-              <Table.HeaderCell>Check in</Table.HeaderCell>
-              <Table.HeaderCell>Check out</Table.HeaderCell>
-              <Table.HeaderCell>
-                <div className="text-center">Guests</div>
-              </Table.HeaderCell>
-              <Table.HeaderCell>Total</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
+        {bookings.length ? (
+          <Table striped>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>Name</Table.HeaderCell>
+                <Table.HeaderCell>Type Of Place</Table.HeaderCell>
+                <Table.HeaderCell>Location</Table.HeaderCell>
+                <Table.HeaderCell>Check in</Table.HeaderCell>
+                <Table.HeaderCell>Check out</Table.HeaderCell>
+                <Table.HeaderCell>
+                  <div className="text-center">Guests</div>
+                </Table.HeaderCell>
+                <Table.HeaderCell>Total</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
 
-          <Table.Body>{renderContent()}</Table.Body>
-        </Table>
+            <Table.Body>{renderContent()}</Table.Body>
+          </Table>
+        ) : (
+          <p>No record yet...</p>
+        )}
       </div>
     </div>
   );

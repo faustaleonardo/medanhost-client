@@ -103,7 +103,11 @@ export default () => {
 
       <Menu.Menu position="right">
         <Menu.Item>
-          {!auth ? <LoginModal /> : <Button onClick={logout}>Logout</Button>}
+          {auth === false ? (
+            <LoginModal />
+          ) : (
+            <Button onClick={logout}>Logout</Button>
+          )}
         </Menu.Item>
       </Menu.Menu>
     </Menu>

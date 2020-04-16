@@ -81,7 +81,7 @@ export default () => {
     ],
   };
 
-  if (!auth) return <Redirect to="/" />;
+  if (auth === false) return <Redirect to="/" />;
   if (!monthStats || !yearStats) return null;
 
   return (

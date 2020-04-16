@@ -24,13 +24,15 @@ export default () => {
 
   useEffect(() => {
     const fetchRooms = async () => {
-      const response = await axiosInstance.get('/api/v1/rooms');
+      const response = await axiosInstance.get(
+        `/api/v1/rooms/hosts/${auth.id}`
+      );
       const data = response.data;
 
       setRooms(data);
     };
-    fetchRooms();
-  }, []);
+    if (auth) fetchRooms();
+  }, [auth]);
 
   const handleShowLocation = async (location) => {
     const response = await opencage.geocode({
@@ -82,7 +84,7 @@ export default () => {
                 }}
               >
                 <Icon name="map marker alternate" />
-                Show Location
+                Show
               </Button>
             </div>
           </Table.Cell>
@@ -112,8 +114,7 @@ export default () => {
     });
   };
 
-  if (!auth) return <Redirect to="/" />;
-  if (!rooms.length) return null;
+  if (auth === false) return <Redirect to="/" />;
 
   return (
     <div>
@@ -139,20 +140,23 @@ export default () => {
         </Button>
       </div>
       <div className="mb-3r">
-        <Table striped>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Name</Table.HeaderCell>
-              <Table.HeaderCell>Types Of Place</Table.HeaderCell>
-              <Table.HeaderCell>Location</Table.HeaderCell>
-              <Table.HeaderCell>Brief Description</Table.HeaderCell>
-              <Table.HeaderCell>Price / Night</Table.HeaderCell>
-              <Table.HeaderCell>Action</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-
-          <Table.Body>{renderContent()}</Table.Body>
-        </Table>
+        {rooms.length ? (
+          <Table striped>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>Name</Table.HeaderCell>
+                <Table.HeaderCell>Types Of Place</Table.HeaderCell>
+                <Table.HeaderCell>Location</Table.HeaderCell>
+                <Table.HeaderCell>Brief Description</Table.HeaderCell>
+                <Table.HeaderCell>Price / Night</Table.HeaderCell>
+                <Table.HeaderCell>Action</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>{renderContent()}</Table.Body>
+          </Table>
+        ) : (
+          <p>No record yet..</p>
+        )}
       </div>
     </div>
   );

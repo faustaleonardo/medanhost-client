@@ -79,7 +79,7 @@ export default () => {
                 onClick={() => handleShowLocation(room.location)}
               >
                 <Icon name="map marker alternate" />
-                Show Location
+                Show
               </Button>
             </div>
           </Table.Cell>
@@ -88,7 +88,7 @@ export default () => {
             {room.baths} baths
           </Table.Cell>
           <Table.Cell>
-            <div className="text-center">4</div>
+            <div className="text-center">{room.user.id}</div>
           </Table.Cell>
           <Table.Cell>
             <Button negative onClick={() => handleDeleteModal(room.id)}>
@@ -100,7 +100,7 @@ export default () => {
     });
   };
 
-  if (!auth) return <Redirect to="/" />;
+  if (auth === false) return <Redirect to="/" />;
   if (!rooms.length) return null;
 
   return (

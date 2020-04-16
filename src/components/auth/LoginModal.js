@@ -34,19 +34,7 @@ export default () => {
       setAuth(user);
       localStorage.setItem('jwt', jwt);
       window.location.reload();
-      switch (user.role.id) {
-        case 1:
-          history.push('/admin/users/manage');
-          break;
-        case 2:
-          history.push(`/`);
-          break;
-        case 3:
-          history.push('/host/rooms');
-          break;
-        default:
-          break;
-      }
+      history.push('/');
     } catch (err) {
       setError(err.response.data.message);
     }
