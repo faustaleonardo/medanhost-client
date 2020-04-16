@@ -8,6 +8,7 @@ import { RoomProvider } from 'context/rooms/roomState';
 import { UserProvider } from 'context/users/userState';
 import { SearchProvider } from 'context/searches/searchState';
 import { BookingProvider } from 'context/bookings/bookingState';
+import { ReviewProvider } from 'context/reviews/reviewState';
 import axiosInstance from 'utils/axiosInstance';
 
 import Navigation from 'components/partials/Navigation';
@@ -128,11 +129,14 @@ export default () => {
               component={ManageBookingList}
             />
           </BookingProvider>
-          <Route
-            exact
-            path="/admin/reviews/manage"
-            component={ManageReviewList}
-          />
+          <ReviewProvider>
+            <Route
+              exact
+              path="/admin/reviews/manage"
+              component={ManageReviewList}
+            />
+          </ReviewProvider>
+
           <Route exact path="/admin/transaction" component={Transaction} />
         </BrowserRouter>
       </Container>
