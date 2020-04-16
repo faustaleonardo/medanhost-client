@@ -14,11 +14,13 @@ export default () => {
       let response = await axiosInstance.get('/api/v1/bookings/incomes/month');
       let result = response.data;
 
+      const thisYear = new Date().getFullYear();
       let data = [...new Array(12)].map((el, index) => {
         const month = index + 1;
-        const match = result.find((each) => each.month_number * 1 === month);
-        if (match && match.year * 1 === new Date().getFullYear())
-          return match.total;
+        const match = result.find(
+          (each) => each.month_number * 1 === month && match.year === thisYear
+        );
+        if (match) return match.total;
         else return 0;
       });
       setMonthStats(data);
@@ -73,7 +75,7 @@ export default () => {
     ],
   };
 
-  if (!monthStats) return;
+  if (!monthStats || !yearStats) return;
 
   return (
     <div>
