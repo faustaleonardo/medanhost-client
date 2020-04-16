@@ -29,7 +29,7 @@ export default () => {
 
       setAuth(user);
       localStorage.setItem('jwt', jwt);
-      history.push(`/admin/users/manage`);
+      window.location.reload();
     } catch (err) {
       setError(err.response.data.message);
     }

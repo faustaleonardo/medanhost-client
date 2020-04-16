@@ -22,8 +22,10 @@ export default () => {
       let data = [...new Array(12)].map((el, index) => {
         const month = index + 1;
         const match = result.find(
-          (each) => each.month_number * 1 === month && match.year === thisYear
+          (each) =>
+            each.month_number * 1 === month && each.year * 1 === thisYear
         );
+
         if (match) return match.total;
         else return 0;
       });
@@ -80,7 +82,6 @@ export default () => {
   };
 
   if (!auth) return <Redirect to="/" />;
-
   if (!monthStats || !yearStats) return null;
 
   return (

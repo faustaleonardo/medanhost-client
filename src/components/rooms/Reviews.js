@@ -21,27 +21,30 @@ export default () => {
   const [rooms, setRooms] = useState([]);
   const [roomId, setRoomId] = useState([]);
 
+  const fetchData = async () => {
+    const response = await axiosInstance.get('/api/v1/bookings');
+    const bookings = response.data;
+
+    // remove duplicate room id
+    const filteredBookings = bookings.filter(
+      (booking) => booking.statusPayment === true
+    );
+    const roomIds = new Set(filteredBookings.map((booking) => booking.room.id));
+    const distinctRoomIds = [...roomIds];
+
+    const roomsData = [];
+    for (const roomId of distinctRoomIds) {
+      const response = await axiosInstance.get(`/api/v1/rooms/${roomId}`);
+      roomsData.push(response.data);
+    }
+    setRooms(roomsData);
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await axiosInstance.get('/api/v1/bookings');
-      const bookings = response.data;
+    fetchData();
+  }, []);
 
-      // remove duplicate room id
-      const filteredBookings = bookings.filter(
-        (booking) => booking.statusPayment === true
-      );
-      const roomIds = new Set(
-        filteredBookings.map((booking) => booking.room.id)
-      );
-      const distinctRoomIds = [...roomIds];
-
-      const roomsData = [];
-      for (const roomId of distinctRoomIds) {
-        const response = await axiosInstance.get(`/api/v1/rooms/${roomId}`);
-        roomsData.push(response.data);
-      }
-      setRooms(roomsData);
-    };
+  useEffect(() => {
     fetchData();
   }, [submitChange]);
 

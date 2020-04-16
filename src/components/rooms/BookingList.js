@@ -23,14 +23,18 @@ export default () => {
   const [bookingId, setBookingId] = useState('');
   const [submitChange, setSubmitChange] = useState(false);
   const [info, setInfo] = useState('');
+  const fetchBookings = async () => {
+    const response = await axiosInstance.get('/api/v1/bookings');
+    const data = response.data;
+
+    setBookings(data);
+  };
 
   useEffect(() => {
-    const fetchBookings = async () => {
-      const response = await axiosInstance.get('/api/v1/bookings');
-      const data = response.data;
+    fetchBookings();
+  }, []);
 
-      setBookings(data);
-    };
+  useEffect(() => {
     fetchBookings();
   }, [submitChange]);
 

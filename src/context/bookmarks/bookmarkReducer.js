@@ -5,7 +5,6 @@ export default (state, action) => {
     case 'SET_BOOKMARKS':
       return { ...state, bookmarks: payload };
     case 'ADD_BOOKMARK':
-      console.log(payload);
       return { ...state, bookmarks: [...state.bookmarks, payload] };
     case 'DELETE_BOOKMARK':
       return {

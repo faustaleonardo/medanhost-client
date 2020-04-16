@@ -33,6 +33,7 @@ export default () => {
       setOpen(false);
       setAuth(user);
       localStorage.setItem('jwt', jwt);
+      window.location.reload();
       switch (user.role.id) {
         case 1:
           history.push('/admin/users/manage');

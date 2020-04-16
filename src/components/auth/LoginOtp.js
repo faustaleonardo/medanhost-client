@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Button, Form, Modal, Message } from 'semantic-ui-react';
 import axiosInstance from 'utils/axiosInstance';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { AuthContext } from 'context/auth/authState';
 
 export default () => {
@@ -11,7 +11,7 @@ export default () => {
 
   const [error, setError] = useState(null);
   const [errorOtp, setErrotOtp] = useState(null);
-  const [info, setInfo] = useState('');
+  const [info, setInfo] = useState(null);
   const [loadingSend, setLoadingSend] = useState(false);
   const [loadingVerify, setLoadingVerify] = useState(false);
 
@@ -19,12 +19,11 @@ export default () => {
   const [code, setCode] = useState('');
 
   const { roleId } = useParams();
-  const history = useHistory();
 
   useEffect(() => {
     setError(null);
     setInfo(null);
-    setEmail(null);
+    setEmail('');
   }, []);
 
   const handleSendOtp = async () => {
@@ -42,7 +41,7 @@ export default () => {
         'We have sent OTP code to your email. Click Verify OTP Code to continue.'
       );
     } catch (err) {
-      setError(err.response.message);
+      setError(err.response.data.message);
       setLoadingSend(false);
     }
   };
@@ -64,7 +63,7 @@ export default () => {
       setAuth(user);
       localStorage.setItem('jwt', jwt);
       setOpen(false);
-      history.push('/');
+      window.location.reload();
     } catch (err) {
       setErrotOtp(err.response.data.message);
       setLoadingVerify(false);
@@ -82,6 +81,7 @@ export default () => {
           label="Email"
           placeholder="johndoe@lorem.com"
           value={email}
+          type={'text'}
           onChange={(event) => setEmail(event.target.value)}
         />
         <Button positive onClick={handleSendOtp} loading={loadingSend}>

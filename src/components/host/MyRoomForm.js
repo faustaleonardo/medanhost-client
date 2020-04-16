@@ -168,7 +168,6 @@ export default ({ title, buttonName }) => {
         room = response.data;
         addRoom(room);
       } else {
-        console.log('hello');
         response = await axiosInstance.patch(`/api/v1/rooms/${id}`, data);
         room = response.data;
         updateRoom(room);
@@ -179,7 +178,7 @@ export default ({ title, buttonName }) => {
       history.push('/host/rooms');
     } catch (err) {
       console.log(err.response.data);
-      setError(err.response.data);
+      setError(err.response.data.message);
     }
   };
 

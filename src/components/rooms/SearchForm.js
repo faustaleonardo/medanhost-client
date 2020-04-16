@@ -52,7 +52,7 @@ export default () => {
       {auth === false || (auth && auth.role.id !== 2) ? (
         <Segment placeholder>
           <Header icon>
-            <Icon name="home " />
+            <Icon name="home" />
             Welcome to MEDANHOST
           </Header>
           <h3 className="text-center">
