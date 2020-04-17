@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const baseUrlDev = 'http://localhost:5000';
-const baseUrlProd = 'https://ce16ca29.ngrok.io';
+const baseUrlProd = 'https://1d49b3ac.ngrok.io';
 
 const jwt = localStorage.getItem('jwt');
 export default axios.create({
