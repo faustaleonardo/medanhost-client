@@ -36,7 +36,8 @@ export default () => {
       window.location.reload();
       history.push('/');
     } catch (err) {
-      setError(err.response.data.message);
+      console.log(err);
+      // setError(err.response.data.message);
     }
   };
 
