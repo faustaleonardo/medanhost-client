@@ -11,7 +11,7 @@ export default ({ open, setOpen, location, setLocation }) => {
     try {
       setLoadingLocation(true);
       const response = await opencage.geocode({
-        key: process.env.REACT_APP_OPENCAGE_API_KEY,
+        key: 'b4b821a42e91471abec749ba0efdeb6f',
         q: query,
       });
       setLoadingLocation(false);

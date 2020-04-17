@@ -69,7 +69,7 @@ export default () => {
 
   const handleShowLocation = async (location) => {
     const response = await opencage.geocode({
-      key: process.env.REACT_APP_OPENCAGE_API_KEY,
+      key: 'b4b821a42e91471abec749ba0efdeb6f',
       q: location,
     });
     const { geometry } = response.results[0];

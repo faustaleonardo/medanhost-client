@@ -82,7 +82,9 @@ export default () => {
         </Modal.Content>
         <Modal.Actions>
           <GoogleLogin
-            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+            clientId={
+              '426480471724-9kuhcp47rvngg0b9igvbe2pat2hd8mbu.apps.googleusercontent.com'
+            }
             buttonText="Login"
             onSuccess={(response) => handleGoogleResponse(response, roleId)}
             onFailure={(response) => handleGoogleResponse(response, null)}

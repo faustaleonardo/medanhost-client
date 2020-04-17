@@ -54,7 +54,7 @@ export default () => {
 
       // fetch lat, lng
       response = await opencage.geocode({
-        key: process.env.REACT_APP_OPENCAGE_API_KEY,
+        key: 'b4b821a42e91471abec749ba0efdeb6f',
         q: data.location,
       });
       const { geometry } = response.results[0];

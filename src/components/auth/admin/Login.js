@@ -50,7 +50,9 @@ export default () => {
 
       <Segment basic textAlign="center">
         <GoogleLogin
-          clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+          clientId={
+            '426480471724-9kuhcp47rvngg0b9igvbe2pat2hd8mbu.apps.googleusercontent.com'
+          }
           buttonText="Login"
           onSuccess={handleGoogleResponse}
           onFailure={handleGoogleResponse}
