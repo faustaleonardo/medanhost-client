@@ -182,7 +182,7 @@ export default () => {
                         description="Book your dream room now :)"
                         amount={booking.price * 100}
                         currency="IDR"
-                        stripeKey={'pk_test_qk9AekFqbYfpDfPjfbYuBHNZ'}
+                        stripeKey={'pk_test_WVtlJ9fZYSLf3lT3yytzUL3C00GUsjC9MT'}
                         email={auth.email}
                         token={(token) => handleStripeToken(booking.id, token)}
                       >
