@@ -1,11 +1,10 @@
 import axios from 'axios';
 
-const baseUrlDev = 'http://localhost:5000';
-const baseUrlProd = 'https://1d49b3ac.ngrok.io';
+const baseURL = 'https://medanhost.xyz';
 
 const jwt = localStorage.getItem('jwt');
 export default axios.create({
-  baseURL: baseUrlProd,
+  baseURL,
   headers: {
     common: {
       Authorization: `Bearer ${jwt}`,
