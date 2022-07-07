@@ -10,7 +10,7 @@
     "chart.js": "^2.9.3",
     "google-maps-react": "^2.0.2",
     "leaflet": "^1.6.0",
-    "moment": "2.24.0",
+    "moment": "2.29.4",
     "opencage-api-client": "^0.7.1",
     "react": "^16.13.1",
     "react-chartjs-2": "^2.9.0",
